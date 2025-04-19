@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABCD POS System - SPA</title>
+  <title>POS System</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="fontawesome-free-6.7.2-web/css/all.min.css">
+  <link rel="stylesheet" href="lib/normalize.css">
   <style>
 
     .banner-category h2 {
@@ -24,24 +25,25 @@
       transition: transform 0.3s ease;
     }
 
+    .cardBody{
+      width: 600px;
+    }
+
+    .btns{
+      position:relative;
+      top: -200px;
+      right: -900px;
+    }
     .dashboard-card:hover {
       transform: translateY(-5px);
       cursor: pointer;
     }
 
-    /* Navigation active state */
-    .navbar-nav .nav-link.active {
-      font-weight: bold;
-      color: #198754 !important;
-    }
-
-    /* Custom card header color */
     .card .card-header.bg-custom {
       background-color: #28a745;
       color: white;
     }
 
-    /* Page container */
     .page {
       display: none;
     }
@@ -49,6 +51,47 @@
     .page.active {
       display: block;
     }
+    .invoice-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #ffffff;
+    }
+
+    .invoice-header {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+    #tot{
+      width: 1300px;
+      height: 300px;
+      background-color: lightgray;
+    }
+    .totSec{
+      position: relative;
+      left: -1000px;
+
+    }
+
+    .table thead {
+      background-color: #00b3b3;
+      color: #fff;
+    }
+    #invoiceTbl th{
+      background-color: #00b3b3;
+    }
+
+    .total-section {
+      font-size: 32px;
+      font-weight: bold;
+      color: #e74c3c;
+      margin-top: 30px;
+    }
+
   </style>
 </head>
 <body>
@@ -73,8 +116,17 @@
         <li class="nav-item">
           <a class="nav-link" data-page="items" href="#">Items</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-page="customers" href="#">Customers</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Others
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" data-page="customers" href="#">Customers</a></li>
+            <li><a class="dropdown-item" href="#">Employees</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">About</a></li>
+          </ul>
         </li>
       </ul>
       <div>
@@ -188,7 +240,7 @@
                   <option value="C003">C003</option>
                   <option value="C004">C004</option>
                 </select>
-                <button class="btn btn-primary">New</button>
+                <button class="btn btn-primary">New Customer</button>
               </div>
             </div>
 
@@ -225,10 +277,9 @@
               <label for="item" class="col-sm-4 col-form-label">Item:</label>
               <div class="col-sm-8">
                 <select id="item" class="form-select">
-                  <option value="coca-cola">Coca-Cola 1L</option>
-                  <option value="pepsi">Pepsi 1L</option>
-                  <option value="fanta">Fanta 1L</option>
-                  <option value="sprite">Sprite 1L</option>
+                  <option value="coca-cola">Coca-Cola </option>
+                  <option value="pepsi">Pepsi </option>
+
                 </select>
               </div>
             </div>
@@ -271,53 +322,91 @@
     </div>
 
     <!-- Invoice Details Section -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header bg-custom">Invoice Details</div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th>Item Code</th>
-              <th>Item Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Order items would appear here -->
-            </tbody>
-          </table>
+    <div class="container my-4">
+
+      <!-- Top Section -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="invoice-card">
+            <div class="invoice-header">Invoice Details</div>
+            <form class="mt-3">
+              <div class="mb-3">
+                <label for="date" class="form-label">Date :</label>
+                <input type="date" class="form-control" id="date">
+              </div>
+              <div class="mb-3">
+                <label for="orderId" class="form-label">Order ID :</label>
+                <input type="text" class="form-control" id="orderId" placeholder="Enter Order ID">
+              </div>
+            </form>
+          </div>
         </div>
       </div>
+
+      <div class="table-responsive" >
+        <table class="table table-bordered text-center" >
+          <thead>
+          <tr id="invoiceTbl">
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Total Summary -->
+      <div class="container mt-3">
+        <div class="payment-container bg-light p-4">
+          <h4 class="text-danger mb-4">Total : 00.0Rs/=</h4>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Cash</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Balance</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Discount</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+
+          <div class="text-end mt-4">
+            <button class="btn btn-warning">Clear</button>
+            <button class="btn btn-success">Renew Order</button>
+            <button class="btn btn-danger">Submit Order</button>
+          </div>
+        </div>
+      </div>
+
     </div>
+
   </div>
 
-  <!-- Items Page -->
+  <!-- Customers Page -->
   <div id="items" class="page">
-    <!-- Page Header -->
     <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-cubes fs-3 me-2"></i>
+      <i class="fas fa-users fs-3 me-2"></i>
       <h1 class="mb-0">Items</h1>
     </div>
 
-    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb p-3 bg-light rounded">
         <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
-        <li class="breadcrumb-item active">Items</li>
+        <li class="breadcrumb-item active">Item</li>
       </ol>
     </nav>
 
-    <!-- Items Section -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-        <span>Item Search</span>
-        <div>
-          <button class="btn btn-primary btn-sm me-2">New Item</button>
-          <button class="btn btn-warning btn-sm">View All Items</button>
-        </div>
+    <div class="card shadow-sm mb-4 cardBody">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Item Search</h5>
       </div>
 
       <div class="card-body">
@@ -329,53 +418,36 @@
           <button class="btn btn-success me-2">Search</button>
           <select class="form-select" style="width: auto;">
             <option>Name</option>
-            <option>Code</option>
-            <option>Category</option>
+            <option>NIC</option>
+            <option>Contact</option>
           </select>
         </div>
-
-        <div class="mb-3">
-          <button class="btn btn-danger me-2">Delete</button>
-          <button class="btn btn-warning me-2">Edit</button>
-          <button class="btn btn-primary me-2">Details</button>
-          <button class="btn btn-success">Clear</button>
-        </div>
-
-        <!-- Items Table -->
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead class="table-success">
-            <tr>
-              <th>Item Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Coca-Cola 1L</td>
-              <td>$2.50</td>
-              <td>150</td>
-            </tr>
-            <tr>
-              <td>Pepsi 1L</td>
-              <td>$2.25</td>
-              <td>120</td>
-            </tr>
-            <tr>
-              <td>Fanta 1L</td>
-              <td>$2.40</td>
-              <td>85</td>
-            </tr>
-            <tr>
-              <td>Sprite 1L</td>
-              <td>$2.30</td>
-              <td>90</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+    </div>
+
+    <div class="mb-4 btns">
+      <button class="btn btn-info me-2">New Item</button>
+      <button class="btn btn-warning">View All Items</button>
+    </div>
+
+    <div class="mb-3">
+      <button class="btn btn-danger me-2">Delete</button>
+      <button class="btn btn-warning me-2">Update</button>
+      <button class="btn btn-info me-2">Details</button>
+      <button class="btn btn-success">Clear</button>
+    </div>
+
+    <!-- Customer Table -->
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead class="table-success">
+        <tr>
+          <th>Item Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+        </tr>
+        </thead>
+      </table>
     </div>
   </div>
 
@@ -386,7 +458,6 @@
       <h1 class="mb-0">Customer</h1>
     </div>
 
-    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb p-3 bg-light rounded">
         <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
@@ -394,8 +465,7 @@
       </ol>
     </nav>
 
-    <!-- Customer Search Section -->
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-4 cardBody">
       <div class="card-header bg-success text-white">
         <h5 class="mb-0">Customer Search</h5>
       </div>
@@ -416,8 +486,7 @@
       </div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="mb-4">
+    <div class="mb-4 btns">
       <button class="btn btn-info me-2">New Customer</button>
       <button class="btn btn-warning">View All Customers</button>
     </div>
@@ -443,21 +512,21 @@
         <tbody>
         <tr>
           <td>C001</td>
-          <td>John Smith</td>
-          <td>123 Main St</td>
-          <td>$3,500</td>
+          <td>Prasad</td>
+          <td>Kalutara</td>
+          <td>$3000</td>
         </tr>
         <tr>
           <td>C002</td>
-          <td>Sarah Johnson</td>
-          <td>456 Oak Ave</td>
-          <td>$4,200</td>
+          <td>Jonathan</td>
+          <td>Panadura</td>
+          <td>$4000</td>
         </tr>
         <tr>
           <td>C003</td>
-          <td>Michael Brown</td>
-          <td>789 Elm Blvd</td>
-          <td>$3,800</td>
+          <td>Samare</td>
+          <td>Wadduwa</td>
+          <td>$2000</td>
         </tr>
         </tbody>
       </table>
@@ -466,20 +535,16 @@
 
 </div>
 
-<!-- Bootstrap JS Bundle with Popper -->
+<!-- Bootstrap  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-  // SPA Navigation System
   document.addEventListener('DOMContentLoaded', function() {
-    // Get all navigation links
     const navLinks = document.querySelectorAll('[data-page]');
     const pages = document.querySelectorAll('.page');
 
-    // Load the last active page from localStorage
     let currentPage = localStorage.getItem('currentPage') || 'home';
     navigateToPage(currentPage);
 
-    // Add click event listeners to all navigation links
     navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
@@ -488,19 +553,15 @@
       });
     });
 
-    // Function to navigate to a specific page
     function navigateToPage(pageName) {
-      // Hide all pages
       pages.forEach(page => {
         page.classList.remove('active');
       });
 
-      // Show the selected page
       const activePage = document.getElementById(pageName);
       if (activePage) {
         activePage.classList.add('active');
 
-        // Update navigation highlighting
         navLinks.forEach(link => {
           if (link.getAttribute('data-page') === pageName) {
             link.classList.add('active');
@@ -509,13 +570,11 @@
           }
         });
 
-        // Save the current page to localStorage
         localStorage.setItem('currentPage', pageName);
       }
     }
 
-    // Sample Data for Demo
-    // You would normally fetch this data from a server or local storage
+
     const sampleCustomers = [
       { id: 'C001', name: 'John Smith', address: '123 Main St', salary: '$3,500' },
       { id: 'C002', name: 'Sarah Johnson', address: '456 Oak Ave', salary: '$4,200' },

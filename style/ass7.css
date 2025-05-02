@@ -1,82 +1,11 @@
-.banner-category h2 {
-    font-size: 24px;
-    margin-bottom: 50px;
-}
-.network img{
-    width: 80vw;
-    height: 70vh;
-}
-.cardSet .fas{
-    font-size: 4rem;
-}
-
-.dashboard-card {
-    transition: transform 0.3s ease;
-}
-
-.cardBody{
-    width: 600px;
-}
-
-.btns{
-    position:relative;
-    top: -200px;
-    right: -900px;
-}
-.dashboard-card:hover {
-    transform: translateY(-5px);
-    cursor: pointer;
-}
-
-.card .card-header.bg-custom {
-    background-color: #28a745;
-    color: white;
-}
-
-.page {
+.section-content {
     display: none;
+    padding: 20px;
 }
-
-.page.active {
+.active-section {
     display: block;
 }
-.invoice-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #ffffff;
-}
-
-.invoice-header {
-    background-color: #28a745;
-    color: white;
-    padding: 8px 12px;
-    font-weight: bold;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-#tot{
-    width: 1300px;
-    height: 300px;
-    background-color: lightgray;
-}
-.totSec{
-    position: relative;
-    left: -1000px;
-
-}
-
-.table thead {
-    background-color: #00b3b3;
-    color: #fff;
-}
-#invoiceTbl th{
-    background-color: #00b3b3;
-}
-
-.total-section {
-    font-size: 32px;
-    font-weight: bold;
-    color: #e74c3c;
-    margin-top: 30px;
+.navbar-brand i {
+    margin-right: 10px;
+    color: #198754;
 }

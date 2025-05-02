@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="fontawesome-free-6.7.2-web/css/all.min.css">
   <link rel="stylesheet" href="lib/normalize.css">
   <link rel="stylesheet" href="style/ass7.css">
+  <!-- jQuery must be imported before bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -21,29 +23,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" data-page="home" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-page="orders" href="#">Orders</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-page="items" href="#">Items</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Others
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" data-page="customers" href="#">Customers</a></li>
-            <li><a class="dropdown-item" href="#">Employees</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">About</a></li>
-          </ul>
-        </li>
-      </ul>
+      <div class="btn-group" role="group" aria-label="Default button group">
+        <button type="button" id="custom" class="btn btn-outline-primary">Customer</button>
+        <button type="button" id="ite" class="btn btn-outline-primary">Item</button>
+        <button type="button" id="order" class="btn btn-outline-primary">Order</button>
+      </div>
       <div>
         <a href="#" class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-user"></i> Sign Up</a>
         <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-sign-out-alt"></i> Log Out</a>
@@ -55,528 +39,362 @@
 <!-- Main Content -->
 <div class="container py-4">
 
-  <!-- Home Page -->
-  <div id="home" class="page">
-    <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-tachometer-alt fs-3 me-2"></i>
-      <h1 class="mb-0">Home</h1>
-    </div>
-
-    <!-- Banner -->
-    <div class="network">
-      <img src="img/img.png" alt="network">
-    </div>
-
-    <!-- Card Grid -->
-    <div class="row g-4 cardSet" >
-      <!-- Customers Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="customers">
-          <div class="card-header bg-custom">Customers</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <div class="card-count">93</div>
-          </div>
-        </div>
+  <section id="orderss">
+    <!-- Orders Page -->
+    <div id="orders" class="page">
+      <!-- Page Header -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-shopping-cart fs-3 me-2"></i>
+        <h1 class="mb-0">Orders</h1>
       </div>
 
-      <!-- Items Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="items">
-          <div class="card-header bg-custom">Items</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-cubes"></i>
-            </div>
-            <div class="card-count">101</div>
-          </div>
-        </div>
-      </div>
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb p-3 bg-light rounded">
+          <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
+          <li class="breadcrumb-item active">Orders</li>
+        </ol>
+      </nav>
 
-      <!-- My Orders Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="orders">
-          <div class="card-header bg-custom">My Orders</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="card-count">999</div>
-          </div>
-        </div>
-      </div>
+      <!-- Two Column Grid -->
+      <div class="row g-4 mb-4">
+        <!-- Customer Details Section -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-custom">Customer Details</div>
+            <div class="card-body">
+              <div class="mb-3 row">
+                <label for="customer" class="col-sm-4 col-form-label">Customer:</label>
+                <div class="col-sm-8 d-flex">
+                  <select id="customer" class="form-select me-2">
+                    <option value="C001">C001</option>
+                    <option value="C002">C002</option>
+                    <option value="C003">C003</option>
+                    <option value="C004">C004</option>
+                  </select>
+                  <button class="btn btn-primary">New Customer</button>
+                </div>
+              </div>
 
-      <!-- Settings Card -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="settings">
-          <div class="card-header bg-custom">Settings</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-cogs"></i>
-            </div>
-            <span class="badge bg-danger">new</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+              <div class="mb-3 row">
+                <label for="address" class="col-sm-4 col-form-label">Address:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="address" class="form-control">
+                </div>
+              </div>
 
-  <!-- Orders Page -->
-  <div id="orders" class="page">
-    <!-- Page Header -->
-    <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-shopping-cart fs-3 me-2"></i>
-      <h1 class="mb-0">Orders</h1>
-    </div>
+              <div class="mb-3 row">
+                <label for="tel" class="col-sm-4 col-form-label">Tel:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="tel" class="form-control">
+                </div>
+              </div>
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb p-3 bg-light rounded">
-        <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
-        <li class="breadcrumb-item active">Orders</li>
-      </ol>
-    </nav>
-
-    <!-- Two Column Grid -->
-    <div class="row g-4 mb-4">
-      <!-- Customer Details Section -->
-      <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-header bg-custom">Customer Details</div>
-          <div class="card-body">
-            <div class="mb-3 row">
-              <label for="customer" class="col-sm-4 col-form-label">Customer:</label>
-              <div class="col-sm-8 d-flex">
-                <select id="customer" class="form-select me-2">
-                  <option value="C001">C001</option>
-                  <option value="C002">C002</option>
-                  <option value="C003">C003</option>
-                  <option value="C004">C004</option>
-                </select>
-                <button class="btn btn-primary">New Customer</button>
+              <div class="mb-3 row">
+                <label for="credit-limit-customer" class="col-sm-4 col-form-label">Credit Limit:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="credit-limit-customer" class="form-control">
+                </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="mb-3 row">
-              <label for="address" class="col-sm-4 col-form-label">Address:</label>
-              <div class="col-sm-8">
-                <input type="text" id="address" class="form-control">
+        <!-- Item Select Section -->
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-custom">Item Select</div>
+            <div class="card-body">
+              <div class="mb-3 row">
+                <label for="item" class="col-sm-4 col-form-label">Item:</label>
+                <div class="col-sm-8">
+                  <select id="item" class="form-select">
+                    <option value="coca-cola">Coca-Cola</option>
+                    <option value="pepsi">Pepsi</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="mb-3 row">
-              <label for="tel" class="col-sm-4 col-form-label">Tel:</label>
-              <div class="col-sm-8">
-                <input type="text" id="tel" class="form-control">
+              <div class="mb-3 row">
+                <label for="price" class="col-sm-4 col-form-label">Price:</label>
+                <div class="col-sm-4">
+                  <input type="text" id="price" class="form-control">
+                </div>
+                <label for="quantity" class="col-sm-2 col-form-label">Qty:</label>
+                <div class="col-sm-2">
+                  <input type="text" id="quantity" class="form-control">
+                </div>
               </div>
-            </div>
 
-            <div class="mb-3 row">
-              <label for="credit-limit-customer" class="col-sm-4 col-form-label">Credit Limit:</label>
-              <div class="col-sm-8">
-                <input type="text" id="credit-limit-customer" class="form-control">
+              <div class="text-center mb-3">
+                <button class="btn btn-success">Order Item</button>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="order-quantity" class="col-sm-4 col-form-label">Order Quantity:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="order-quantity" class="form-control">
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label for="credit-limit-order" class="col-sm-4 col-form-label">Credit Limit:</label>
+                <div class="col-sm-8">
+                  <input type="text" id="credit-limit-order" class="form-control">
+                </div>
+              </div>
+
+              <div class="text-end mt-4">
+                <button class="btn btn-danger">Place Order</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Item Select Section -->
-      <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-          <div class="card-header bg-custom">Item Select</div>
-          <div class="card-body">
-            <div class="mb-3 row">
-              <label for="item" class="col-sm-4 col-form-label">Item:</label>
-              <div class="col-sm-8">
-                <select id="item" class="form-select">
-                  <option value="coca-cola">Coca-Cola </option>
-                  <option value="pepsi">Pepsi </option>
-
-                </select>
-              </div>
+      <!-- Invoice Details Section -->
+      <div class="container my-4 px-0">
+        <!-- Top Section -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="invoice-card">
+              <div class="invoice-header">Invoice Details</div>
+              <form class="mt-3">
+                <div class="mb-3">
+                  <label for="date" class="form-label">Date:</label>
+                  <input type="date" class="form-control" id="date">
+                </div>
+                <div class="mb-3">
+                  <label for="orderId" class="form-label">Order ID:</label>
+                  <input type="text" class="form-control" id="orderId" placeholder="Enter Order ID">
+                </div>
+              </form>
             </div>
+          </div>
+        </div>
 
-            <div class="mb-3 row">
-              <label for="price" class="col-sm-4 col-form-label">Price:</label>
-              <div class="col-sm-4">
-                <input type="text" id="price" class="form-control">
+        <div class="table-responsive">
+          <table class="table table-bordered text-center">
+            <thead>
+            <tr id="invoiceTbl">
+              <th>Item Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Invoice items will be dynamically added here -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Total Summary -->
+        <div class="mt-3">
+          <div class="payment-container bg-light p-4">
+            <h4 class="text-danger mb-4">Total: 00.0Rs/=</h4>
+
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label class="form-label">Cash</label>
+                <input type="text" class="form-control">
               </div>
-              <label for="quantity" class="col-sm-2 col-form-label">Qty:</label>
-              <div class="col-sm-2">
-                <input type="text" id="quantity" class="form-control">
+              <div class="col-md-4">
+                <label class="form-label">Balance</label>
+                <input type="text" class="form-control">
               </div>
-            </div>
-
-            <div class="text-center mb-3">
-              <button class="btn btn-success">Order Item</button>
-            </div>
-
-            <div class="mb-3 row">
-              <label for="order-quantity" class="col-sm-4 col-form-label">Order Quantity:</label>
-              <div class="col-sm-8">
-                <input type="text" id="order-quantity" class="form-control">
-              </div>
-            </div>
-
-            <div class="mb-3 row">
-              <label for="credit-limit-order" class="col-sm-4 col-form-label">Credit Limit:</label>
-              <div class="col-sm-8">
-                <input type="text" id="credit-limit-order" class="form-control">
+              <div class="col-md-4">
+                <label class="form-label">Discount</label>
+                <input type="text" class="form-control">
               </div>
             </div>
 
             <div class="text-end mt-4">
-              <button class="btn btn-danger">Place Order</button>
+              <button class="btn btn-warning">Clear</button>
+              <button class="btn btn-success">Renew Order</button>
+              <button class="btn btn-danger">Submit Order</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Invoice Details Section -->
-    <div class="container my-4">
+  <section id="itemss">
+    <!-- Item Page -->
+    <div id="items" class="page">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-cubes fs-3 me-2"></i>
+        <h1 class="mb-0">Items</h1>
+      </div>
 
-      <!-- Top Section -->
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="invoice-card">
-            <div class="invoice-header">Invoice Details</div>
-            <form class="mt-3">
-              <div class="mb-3">
-                <label for="date" class="form-label">Date :</label>
-                <input type="date" class="form-control" id="date">
-              </div>
-              <div class="mb-3">
-                <label for="orderId" class="form-label">Order ID :</label>
-                <input type="text" class="form-control" id="orderId" placeholder="Enter Order ID">
-              </div>
-            </form>
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb p-3 bg-light rounded">
+          <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
+          <li class="breadcrumb-item active">Item</li>
+        </ol>
+      </nav>
+
+      <div class="card shadow-sm mb-4 cardBody">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Item Search</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Input Item Name/Code Here">
+          </div>
+
+          <div class="mb-3 d-flex flex-wrap">
+            <button class="btn btn-success me-2 mb-2">Search</button>
+            <select class="form-select mb-2" style="width: auto;">
+              <option>Name</option>
+              <option>NIC</option>
+              <option>Contact</option>
+            </select>
           </div>
         </div>
       </div>
 
-      <div class="table-responsive" >
-        <table class="table table-bordered text-center" >
-          <thead>
-          <tr id="invoiceTbl">
+      <div class="mb-4 btns">
+        <button class="btn btn-info me-2 mb-2">New Item</button>
+        <button class="btn btn-warning mb-2">View All Items</button>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-danger me-2 mb-2">Delete</button>
+        <button class="btn btn-warning me-2 mb-2">Update</button>
+        <button class="btn btn-info me-2 mb-2">Details</button>
+        <button class="btn btn-success mb-2">Clear</button>
+      </div>
+
+      <!-- Items Table -->
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="table-success">
+          <tr>
             <th>Item Name</th>
             <th>Price</th>
             <th>Quantity</th>
-            <th>Total</th>
           </tr>
           </thead>
           <tbody>
+          <!-- Item data will go here -->
           </tbody>
         </table>
       </div>
+    </div>
+  </section>
 
-      <!-- Total Summary -->
-      <div class="container mt-3">
-        <div class="payment-container bg-light p-4">
-          <h4 class="text-danger mb-4">Total : 00.0Rs/=</h4>
+  <section id="customerss">
+    <!-- Customers Page -->
+    <div id="customers" class="page">
+      <div class="d-flex align-items-center mb-4">
+        <i class="fas fa-users fs-3 me-2"></i>
+        <h1 class="mb-0">Customer</h1>
+      </div>
 
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label class="form-label">Cash</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Balance</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label">Discount</label>
-              <input type="text" class="form-control">
-            </div>
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb p-3 bg-light rounded">
+          <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
+          <li class="breadcrumb-item active">Customer</li>
+        </ol>
+      </nav>
+
+      <div class="card shadow-sm mb-4 cardBody">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">Customer Search</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Input Name/NIC/Tp Here">
           </div>
 
-          <div class="text-end mt-4">
-            <button class="btn btn-warning">Clear</button>
-            <button class="btn btn-success">Renew Order</button>
-            <button class="btn btn-danger">Submit Order</button>
+          <div class="mb-3 d-flex flex-wrap">
+            <button class="btn btn-success me-2 mb-2">Search</button>
+            <select class="form-select mb-2" style="width: auto;">
+              <option>Name</option>
+              <option>NIC</option>
+              <option>Contact</option>
+            </select>
           </div>
         </div>
       </div>
-    </div>
 
-  </div>
-
-  <!-- Customers Page -->
-  <div id="items" class="page">
-    <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-users fs-3 me-2"></i>
-      <h1 class="mb-0">Items</h1>
-    </div>
-
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb p-3 bg-light rounded">
-        <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
-        <li class="breadcrumb-item active">Item</li>
-      </ol>
-    </nav>
-
-    <div class="card shadow-sm mb-4 cardBody">
-      <div class="card-header bg-success text-white">
-        <h5 class="mb-0">Item Search</h5>
+      <div class="mb-4 btns">
+        <button class="btn btn-info me-2 mb-2">New Customer</button>
+        <button class="btn btn-warning mb-2">View All Customers</button>
       </div>
 
-      <div class="card-body">
-        <div class="mb-3">
-          <input type="text" class="form-control" placeholder="Input Item Name/Code Here">
-        </div>
-
-        <div class="mb-3 d-flex">
-          <button class="btn btn-success me-2">Search</button>
-          <select class="form-select" style="width: auto;">
-            <option>Name</option>
-            <option>NIC</option>
-            <option>Contact</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-4 btns">
-      <button class="btn btn-info me-2">New Item</button>
-      <button class="btn btn-warning">View All Items</button>
-    </div>
-
-    <div class="mb-3">
-      <button class="btn btn-danger me-2">Delete</button>
-      <button class="btn btn-warning me-2">Update</button>
-      <button class="btn btn-info me-2">Details</button>
-      <button class="btn btn-success">Clear</button>
-    </div>
-
-    <!-- Customer Table -->
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead class="table-success">
-        <tr>
-          <th>Item Name</th>
-          <th>Price</th>
-          <th>Quantity</th>
-        </tr>
-        </thead>
-      </table>
-    </div>
-  </div>
-
-  <!-- Customers Page -->
-  <div id="customers" class="page">
-    <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-users fs-3 me-2"></i>
-      <h1 class="mb-0">Customer</h1>
-    </div>
-
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb p-3 bg-light rounded">
-        <li class="breadcrumb-item"><a href="#" data-page="home">Home</a></li>
-        <li class="breadcrumb-item active">Customer</li>
-      </ol>
-    </nav>
-
-    <div class="card shadow-sm mb-4 cardBody">
-      <div class="card-header bg-success text-white">
-        <h5 class="mb-0">Customer Search</h5>
+      <div class="mb-3">
+        <button class="btn btn-danger me-2 mb-2">Delete</button>
+        <button class="btn btn-warning me-2 mb-2">Update</button>
+        <button class="btn btn-info me-2 mb-2">Details</button>
+        <button class="btn btn-success mb-2">Clear</button>
       </div>
 
-      <div class="card-body">
-        <div class="mb-3">
-          <input type="text" class="form-control" placeholder="Input Name/NIC/Tp Here">
-        </div>
-
-        <div class="mb-3 d-flex">
-          <button class="btn btn-success me-2">Search</button>
-          <select class="form-select" style="width: auto;">
-            <option>Name</option>
-            <option>NIC</option>
-            <option>Contact</option>
-          </select>
-        </div>
+      <!-- Customer Table -->
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="table-success">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Salary</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>C001</td>
+            <td>Prasad</td>
+            <td>Kalutara</td>
+            <td>$3000</td>
+          </tr>
+          <tr>
+            <td>C002</td>
+            <td>Jonathan</td>
+            <td>Panadura</td>
+            <td>$4000</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <div class="mb-4 btns">
-      <button class="btn btn-info me-2">New Customer</button>
-      <button class="btn btn-warning">View All Customers</button>
-    </div>
-
-    <div class="mb-3">
-      <button class="btn btn-danger me-2">Delete</button>
-      <button class="btn btn-warning me-2">Update</button>
-      <button class="btn btn-info me-2">Details</button>
-      <button class="btn btn-success">Clear</button>
-    </div>
-
-    <!-- Customer Table -->
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead class="table-success">
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Salary</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>C001</td>
-          <td>Prasad</td>
-          <td>Kalutara</td>
-          <td>$3000</td>
-        </tr>
-        <tr>
-          <td>C002</td>
-          <td>Jonathan</td>
-          <td>Panadura</td>
-          <td>$4000</td>
-        </tr>
-        <tr>
-          <td>C003</td>
-          <td>Samare</td>
-          <td>Wadduwa</td>
-          <td>$2000</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
+  </section>
 </div>
 
-<!-- Bootstrap  -->
+<!-- Bootstrap -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="lib/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('[data-page]');
-    const pages = document.querySelectorAll('.page');
+  // Hide all content sections initially except for customer content
+  $("#orderss").css("display", "none");
+  $("#itemss").css("display", "none");
+  $("#customerss").css("display", "block"); // Show customer page by default
 
-    let currentPage = localStorage.getItem('currentPage') || 'home';
-    navigateToPage(currentPage);
+  // Customer navigation button
+  $("#custom").on('click', function () {
+    $("#customerss").css("display", "block");
+    $("#orderss").css("display", "none");
+    $("#itemss").css("display", "none");
+  });
 
-    navLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const pageName = this.getAttribute('data-page');
-        navigateToPage(pageName);
-      });
-    });
+  // Item navigation button
+  $("#ite").on('click', function () {
+    $("#itemss").css("display", "block");
+    $("#customerss").css("display", "none");
+    $("#orderss").css("display", "none");
+  });
 
-    function navigateToPage(pageName) {
-      pages.forEach(page => {
-        page.classList.remove('active');
-      });
-
-      const activePage = document.getElementById(pageName);
-      if (activePage) {
-        activePage.classList.add('active');
-
-        navLinks.forEach(link => {
-          if (link.getAttribute('data-page') === pageName) {
-            link.classList.add('active');
-          } else {
-            link.classList.remove('active');
-          }
-        });
-
-        localStorage.setItem('currentPage', pageName);
-      }
-    }
-
-
-    const sampleCustomers = [
-      { id: 'C001', name: 'John Smith', address: '123 Main St', salary: '$3,500' },
-      { id: 'C002', name: 'Sarah Johnson', address: '456 Oak Ave', salary: '$4,200' },
-      { id: 'C003', name: 'Michael Brown', address: '789 Elm Blvd', salary: '$3,800' }
-    ];
-
-    const sampleItems = [
-      { name: 'Coca-Cola 1L', price: '$2.50', quantity: 150 },
-      { name: 'Pepsi 1L', price: '$2.25', quantity: 120 },
-      { name: 'Fanta 1L', price: '$2.40', quantity: 85 },
-      { name: 'Sprite 1L', price: '$2.30', quantity: 90 }
-    ];
-
-    // Banner Carousel Effect
-    let currentSlide = 0;
-    const bannerCategories = document.querySelectorAll('.banner-category h2');
-    const arrowLeft = document.querySelector('.arrow-left');
-    const arrowRight = document.querySelector('.arrow-right');
-
-    if (arrowLeft && arrowRight) {
-      arrowLeft.addEventListener('click', function() {
-        currentSlide = (currentSlide - 1 + bannerCategories.length) % bannerCategories.length;
-        updateBanner();
-      });
-
-      arrowRight.addEventListener('click', function() {
-        currentSlide = (currentSlide + 1) % bannerCategories.length;
-        updateBanner();
-      });
-
-      function updateBanner() {
-        bannerCategories.forEach((category, index) => {
-          if (index === currentSlide) {
-            category.style.fontWeight = 'bold';
-          } else {
-            category.style.fontWeight = 'normal';
-          }
-        });
-      }
-    }
-
-    // Customer dropdown functionality
-    const customerDropdown = document.getElementById('customer');
-    if (customerDropdown) {
-      customerDropdown.addEventListener('change', function() {
-        const selectedCustomer = sampleCustomers.find(c => c.id === this.value);
-        if (selectedCustomer) {
-          document.getElementById('address').value = selectedCustomer.address;
-          document.getElementById('tel').value = '555-123-4567'; // Sample data
-          document.getElementById('credit-limit-customer').value = '$5,000'; // Sample data
-        }
-      });
-    }
-
-    // Item dropdown functionality
-    const itemDropdown = document.getElementById('item');
-    if (itemDropdown) {
-      itemDropdown.addEventListener('change', function() {
-        const selectedItem = sampleItems.find(i => i.name.toLowerCase().includes(this.value));
-        if (selectedItem) {
-          document.getElementById('price').value = selectedItem.price;
-          document.getElementById('quantity').value = '1';
-        }
-      });
-    }
-
-    // Search functionality - just a stub for demo purposes
-    const searchButtons = document.querySelectorAll('.btn-success');
-    searchButtons.forEach(button => {
-      if (button.textContent === 'Search') {
-        button.addEventListener('click', function() {
-          alert('Search functionality would be implemented here!');
-        });
-      }
-    });
-
-    // Form clearing functionality
-    const clearButtons = document.querySelectorAll('.btn-success');
-    clearButtons.forEach(button => {
-      if (button.textContent === 'Clear') {
-        button.addEventListener('click', function() {
-          const inputs = document.querySelectorAll('input');
-          inputs.forEach(input => {
-            input.value = '';
-          });
-        });
-      }
-    });
+  // Order navigation button
+  $("#order").on('click', function () {
+    $("#orderss").css("display", "block");
+    $("#customerss").css("display", "none");
+    $("#itemss").css("display", "none");
   });
 </script>
 </body>

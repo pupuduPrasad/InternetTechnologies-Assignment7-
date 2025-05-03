@@ -74,7 +74,7 @@ $('#updateBtn').on('click', function(){
     } else if(selectedCustomerIndex === -1) {
         Swal.fire({
             title: 'Error!',
-            text: 'No customer selected for update',
+            text: 'No customer selected',
             icon: 'error',
             confirmButtonText: 'Ok'
         })
@@ -93,6 +93,44 @@ $('#updateBtn').on('click', function(){
             title: "Updated Successfully!",
             icon: "success",
             draggable: true
+        });
+    }
+});
+
+// delete
+$('#deleteBtn').on('click', function(){
+    if(selectedCustomerIndex === -1) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'No customer selected',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+    } else {
+        // Confirm before deletion
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "No !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                customers_db.splice(selectedCustomerIndex, 1);
+                loadCustomer();
+                clearForm();
+
+                selectedCustomerIndex = -1;
+
+                Swal.fire(
+                    'Deleted!',
+                    'Customer has been deleted.',
+                    'success'
+                );
+            }
         });
     }
 });

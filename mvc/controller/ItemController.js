@@ -21,3 +21,32 @@ function loadItems() {
         $('table tbody').append(data);
     })
 }
+
+$('#saveItemBtn').on('click', function(){
+    let itemCode = $('#itemCode').val();
+    let itemName = $('#itemName').val();
+    let itemPrice = $('#itemPrice').val();
+    let itemQuantity = $('#itemQuantity').val();
+
+    if(itemCode === '' || itemName === '' || itemPrice === '' || itemQuantity === '') {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Invalid Inputs',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    } else {
+        let item_data = new ItemModel(itemCode, itemName, parseFloat(itemPrice), parseInt(itemQuantity));
+        items_db.push(item_data);
+        console.log(item_data);
+
+        loadItems();
+        clearForm();
+
+        Swal.fire({
+            title: "Added Successfully!",
+            icon: "success",
+            draggable: true
+        });
+    }
+});

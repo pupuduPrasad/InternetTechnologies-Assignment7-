@@ -110,7 +110,6 @@ $('#deleteBtn').on('click', function(){
         // Confirm before deletion
         Swal.fire({
             title: 'Are you sure?',
-            text: "No !",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

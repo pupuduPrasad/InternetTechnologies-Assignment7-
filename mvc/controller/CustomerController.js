@@ -1,6 +1,8 @@
 import {customers_db} from "../db/DB.js";
 import CustomerModel from "../model/CustomerModel.js";
-// load student records
+
+
+// load customer
 function loadCustomer() {
     $('#customer-tbody').empty();
     customers_db.map((item, index) => {
@@ -23,7 +25,6 @@ function loadCustomer() {
 
 // save
 $('#saveBtn').on('click', function(){
-    // let fname = document.getElementById('fname').value;
     let fullName = $('#fullName').val();
     let address = $('#address').val();
     let email = $('#email').val();
@@ -41,13 +42,11 @@ $('#saveBtn').on('click', function(){
 
 
         let customer_data = new CustomerModel(fullName, address, email, contactNumber);
-
         customers_db.push(customer_data);
-
         console.log(customer_data);
 
         loadCustomer();
-
+        clearForm();
 
         Swal.fire({
             title: "Added Successfully!",
@@ -57,11 +56,14 @@ $('#saveBtn').on('click', function(){
     }
 });
 
+
 $("#customer-tbody").on('click', 'tr', function(){
     let idx = $(this).index();
     console.log(idx);
     let obj = customers_db[idx];
     console.log(obj);
+
+
 
     let fullName = obj.fullName;
     let address = obj.address;
@@ -72,4 +74,21 @@ $("#customer-tbody").on('click', 'tr', function(){
     $("#address").val(address);
     $("#email").val(email);
     $("#contactNumber").val(contactNumber);
+
+    $('#saveBtn').hide();
+    $('#updateBtn').show();
+    $('#deleteBtn').show();
 });
+
+function clearForm() {
+    $("#fullName").val('');
+    $("#address").val('');
+    $("#email").val('');
+    $("#contactNumber").val('');
+
+    // Show save button, hide update and delete buttons
+    $('#saveBtn').show();
+    $('#updateBtn').hide();
+    $('#deleteBtn').hide();
+}
+

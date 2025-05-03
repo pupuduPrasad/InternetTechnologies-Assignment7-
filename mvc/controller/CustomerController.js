@@ -133,4 +133,6 @@ function clearForm() {
     $('#updateBtn').hide();
     $('#deleteBtn').hide();
 }
-
+$('#refreshBtn').on('click', function(){
+    clearForm();
+});

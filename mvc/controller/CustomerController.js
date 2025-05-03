@@ -1,6 +1,7 @@
 import {customers_db} from "../db/DB.js";
 import CustomerModel from "../model/CustomerModel.js";
-
+// global variable
+let selectedCustomerIndex = -1;
 
 // load customer
 function loadCustomer() {
@@ -56,6 +57,46 @@ $('#saveBtn').on('click', function(){
     }
 });
 
+// update
+$('#updateBtn').on('click', function(){
+    let fullName = $('#fullName').val();
+    let address = $('#address').val();
+    let email = $('#email').val();
+    let contactNumber = $('#contactNumber').val();
+
+    if(fullName === '' || address === '' || email === '' || contactNumber === '') {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Invalid Inputs',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    } else if(selectedCustomerIndex === -1) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'No customer selected for update',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    } else {
+        // Update the customer object
+        customers_db[selectedCustomerIndex].fullName = fullName;
+        customers_db[selectedCustomerIndex].address = address;
+        customers_db[selectedCustomerIndex].email = email;
+        customers_db[selectedCustomerIndex].contactNumber = contactNumber;
+
+        console.log("Updated customer:", customers_db[selectedCustomerIndex]);
+        loadCustomer();
+        clearForm();
+
+        Swal.fire({
+            title: "Updated Successfully!",
+            icon: "success",
+            draggable: true
+        });
+    }
+});
+
 
 $("#customer-tbody").on('click', 'tr', function(){
     let idx = $(this).index();
@@ -63,7 +104,8 @@ $("#customer-tbody").on('click', 'tr', function(){
     let obj = customers_db[idx];
     console.log(obj);
 
-
+    // store the select index number
+    selectedCustomerIndex = idx;
 
     let fullName = obj.fullName;
     let address = obj.address;

@@ -91,3 +91,28 @@ $('#updateItemBtn').on('click', function(){
         });
     }
 });
+
+// Item row click event
+$("table tbody").on('click', 'tr', function(){
+    let idx = $(this).index();
+    console.log(idx);
+    let obj = items_db[idx];
+    console.log(obj);
+
+    // Store the selected index number
+    selectedItemIndex = idx;
+
+    let itemCode = obj.itemCode;
+    let itemName = obj.itemName;
+    let itemPrice = obj.itemPrice;
+    let itemQuantity = obj.itemQuantity;
+
+    $("#itemCode").val(itemCode);
+    $("#itemName").val(itemName);
+    $("#itemPrice").val(itemPrice);
+    $("#itemQuantity").val(itemQuantity);
+
+    $('#saveItemBtn').hide();
+    $('#updateItemBtn').show();
+    $('#deleteItemBtn').show();
+});

@@ -91,8 +91,41 @@ $('#updateItemBtn').on('click', function(){
         });
     }
 });
+// delete
+$('#deleteItemBtn').on('click', function(){
+    if(selectedItemIndex === -1) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'No item selected',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+    } else {
+        // Confirm before deletion
+        Swal.fire({
+            title: 'Are you sure?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
 
-// Item row click event
+                items_db.splice(selectedItemIndex, 1);
+                loadItems();
+                selectedItemIndex = -1;
+
+                Swal.fire(
+                    'Deleted!',
+                    'Item has been deleted.',
+                    'success'
+                );
+            }
+        });
+    }
+});
+
 $("table tbody").on('click', 'tr', function(){
     let idx = $(this).index();
     console.log(idx);

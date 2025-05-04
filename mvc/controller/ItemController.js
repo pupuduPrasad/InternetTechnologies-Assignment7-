@@ -114,6 +114,7 @@ $('#deleteItemBtn').on('click', function(){
 
                 items_db.splice(selectedItemIndex, 1);
                 loadItems();
+                clearForm();
                 selectedItemIndex = -1;
 
                 Swal.fire(
@@ -148,4 +149,21 @@ $("table tbody").on('click', 'tr', function(){
     $('#saveItemBtn').hide();
     $('#updateItemBtn').show();
     $('#deleteItemBtn').show();
+});
+
+// Clear form function
+function clearForm() {
+    $("#itemCode").val('');
+    $("#itemName").val('');
+    $("#itemPrice").val('');
+    $("#itemQuantity").val('');
+    $("#itemId").val('');
+
+    $('#saveItemBtn').show();
+    $('#updateItemBtn').hide();
+    $('#deleteItemBtn').hide();
+}
+
+$('#refreshItemBtn').on('click', function(){
+    clearForm();
 });

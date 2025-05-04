@@ -1,6 +1,7 @@
 import {items_db} from "../db/DB.js";
 import ItemModel from "../model/ItemModel.js";
 
+let selectedItemIndex = -1;
 
 // load items
 function loadItems() {
@@ -45,6 +46,46 @@ $('#saveItemBtn').on('click', function(){
 
         Swal.fire({
             title: "Added Successfully!",
+            icon: "success",
+            draggable: true
+        });
+    }
+});
+
+// update
+$('#updateItemBtn').on('click', function(){
+    let itemCode = $('#itemCode').val();
+    let itemName = $('#itemName').val();
+    let itemPrice = $('#itemPrice').val();
+    let itemQuantity = $('#itemQuantity').val();
+
+    if(itemCode === '' || itemName === '' || itemPrice === '' || itemQuantity === '') {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Invalid Inputs',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    } else if(selectedItemIndex === -1) {
+        Swal.fire({
+            title: 'Error!',
+            text: 'No item selected',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    } else {
+        // Update the item object
+        items_db[selectedItemIndex].itemCode = itemCode;
+        items_db[selectedItemIndex].itemName = itemName;
+        items_db[selectedItemIndex].itemPrice = parseFloat(itemPrice);
+        items_db[selectedItemIndex].itemQuantity = parseInt(itemQuantity);
+
+        console.log("Updated item:", items_db[selectedItemIndex]);
+        loadItems();
+        clearForm();
+
+        Swal.fire({
+            title: "Updated Successfully!",
             icon: "success",
             draggable: true
         });

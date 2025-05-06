@@ -3,6 +3,11 @@ import CustomerModel from "../model/CustomerModel.js";
 // global variable
 let selectedCustomerIndex = -1;
 
+$(document).ready(function() {
+    $('#customerId').val(generateCustomerId());
+    loadCustomer();
+});
+
 
 function generateCustomerId() {
     if (customers_db.length === 0) {
@@ -18,12 +23,12 @@ function generateCustomerId() {
 // load customer
 function loadCustomer() {
     $('#customer-tbody').empty();
-    customers_db.map((item, index) => {
-        let customerId = item.customerId;
-        let fullName = item.fullName;
-        let address = item.address;
-        let email = item.email;
-        let contactNumber = item.contactNumber;
+    customers_db.map((customer, index) => {
+        let customerId = customer.customerId;
+        let fullName = customer.fullName;
+        let address = customer.address;
+        let email = customer.email;
+        let contactNumber = customer.contactNumber;
 
         let data = `<tr>
                             <td>${customerId}</td>
@@ -39,12 +44,13 @@ function loadCustomer() {
 
 // save
 $('#saveBtn').on('click', function(){
+    let customerId = $('#customerId').val();
     let fullName = $('#fullName').val();
     let address = $('#address').val();
     let email = $('#email').val();
     let contactNumber = $('#contactNumber').val();
 
-    if(fullName === '' || address === '' || email === '' || contactNumber === '') {
+    if(customerId === '' ||fullName === '' || address === '' || email === '' || contactNumber === '') {
         Swal.fire({
             title: 'Error!',
             text: 'Invalid Inputs',
@@ -52,7 +58,7 @@ $('#saveBtn').on('click', function(){
             confirmButtonText: 'Ok'
         });
     } else {
-        let customerId = generateCustomerId(); // Generate new ID
+        // let customerId = generateCustomerId(); // Generate new ID
         let customer_data = new CustomerModel(customerId, fullName, address, email, contactNumber);
         customers_db.push(customer_data);
         console.log(customer_data);
@@ -155,11 +161,13 @@ $("#customer-tbody").on('click', 'tr', function(){
     // store the select index number
     selectedCustomerIndex = idx;
 
+    let customerID = obj.customerID;
     let fullName = obj.fullName;
     let address = obj.address;
     let email = obj.email;
     let contactNumber = obj.contactNumber;
 
+    $('#customerId').val(customerID);
     $("#fullName").val(fullName);
     $("#address").val(address);
     $("#email").val(email);
@@ -171,10 +179,12 @@ $("#customer-tbody").on('click', 'tr', function(){
 });
 
 function clearForm() {
+    $('#customerId').val(generateCustomerId());
     $("#fullName").val('');
     $("#address").val('');
     $("#email").val('');
     $("#contactNumber").val('');
+    selectedCustomerIndex = -1;
 
     // Show save button, hide update and delete buttons
     $('#saveBtn').show();

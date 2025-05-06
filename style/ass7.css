@@ -9,3 +9,23 @@
     margin-right: 10px;
     color: #198754;
 }
+.network img{
+    width: 80vw;
+    height: 70vh;
+}
+body{
+    background: linear-gradient(to right, #a8e6cf, #379683);
+
+}
+.card .card-header.bg-custom {
+    background-color: #28a745;
+    color: white;
+}
+#home{
+    padding-left: 15vw;
+    padding-top: 30vh;
+}
+.cards{
+    width: 25vw;
+    height: 25vh;
+}

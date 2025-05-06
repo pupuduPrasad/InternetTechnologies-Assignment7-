@@ -194,8 +194,8 @@
           <form id="itemForm">
             <div class="row mb-3">
               <div class="col-md-6">
-                <label for="itemId" class="form-label">Item Id</label>
-                <input type="text" class="form-control" id="itemId" readonly>
+                <label for="itemCode" class="form-label">Item Id</label>
+                <input type="text" class="form-control" id="itemCode" readonly>
               </div>
               <div class="col-md-6">
                 <label for="itemName" class="form-label">Item Name</label>
@@ -224,7 +224,7 @@
               <button type="button" id="deleteItemBtn" class="btn btn-danger">
                 <i class="fas fa-trash me-1"></i> Delete
               </button>
-              <button type="reset" id="refreshItemBtn" class="btn btn-info">
+              <button type="button" id="refreshItemBtn" class="btn btn-info">
                 <i class="fas fa-sync-alt me-1"></i> Refresh
               </button>
             </div>
@@ -248,7 +248,7 @@
                 <th>Quantity</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="item-tbody">
               </tbody>
             </table>
           </div>
@@ -349,8 +349,7 @@
                 <th>Total Amount</th>
               </tr>
               </thead>
-              <tbody>
-
+              <tbody id="order-tbody">
               </tbody>
             </table>
           </div>

@@ -58,7 +58,7 @@ $('#saveBtn').on('click', function(){
             confirmButtonText: 'Ok'
         });
     } else {
-        // let customerId = generateCustomerId(); // Generate new ID
+        let customerId = generateCustomerId(); // Generate new ID
         let customer_data = new CustomerModel(customerId, fullName, address, email, contactNumber);
         customers_db.push(customer_data);
         console.log(customer_data);
@@ -179,9 +179,6 @@ $("#customer-tbody").on('click', 'tr', function(){
 });
 
 function clearForm() {
-    const newId = generateCustomerId();
-    console.log("Generated ID:", newId);
-
     $('#customerId').val(generateCustomerId());
     $("#fullName").val('');
     $("#address").val('');

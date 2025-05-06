@@ -3,6 +3,10 @@ import ItemModel from "../model/ItemModel.js";
 
 let selectedItemIndex = -1;
 
+$(document).ready(function() {
+    $('#itemCode').val(generateItemCode());
+    loadItems();
+});
 
 function generateItemCode() {
     if (items_db.length === 0) {
@@ -18,7 +22,7 @@ function generateItemCode() {
 
 // load items
 function loadItems() {
-    $('table tbody').empty();
+    $('#item-tbody').empty();
     items_db.map((item, index) => {
         let itemCode = item.itemCode;
         let itemName = item.itemName;
@@ -32,16 +36,17 @@ function loadItems() {
                         <td>${itemQuantity}</td>
                     </tr>`
 
-        $('table tbody').append(data);
+        $('#item-tbody').append(data);
     })
 }
 
 $('#saveItemBtn').on('click', function(){
+    let itemCode = $('#itemCode').val();
     let itemName = $('#itemName').val();
     let itemPrice = $('#itemPrice').val();
     let itemQuantity = $('#itemQuantity').val();
 
-    if(itemName === '' || itemPrice === '' || itemQuantity === '') {
+    if(itemCode === '' ||itemName === '' || itemPrice === '' || itemQuantity === '') {
         Swal.fire({
             title: 'Error!',
             text: 'Invalid Inputs',
@@ -67,12 +72,11 @@ $('#saveItemBtn').on('click', function(){
 
 // update
 $('#updateItemBtn').on('click', function(){
-    let itemCode = $('#itemCode').val();
     let itemName = $('#itemName').val();
     let itemPrice = $('#itemPrice').val();
     let itemQuantity = $('#itemQuantity').val();
 
-    if(itemCode === '' || itemName === '' || itemPrice === '' || itemQuantity === '') {
+    if(itemName === '' || itemPrice === '' || itemQuantity === '') {
         Swal.fire({
             title: 'Error!',
             text: 'Invalid Inputs',
@@ -88,7 +92,6 @@ $('#updateItemBtn').on('click', function(){
         })
     } else {
         // Update the item object
-        items_db[selectedItemIndex].itemCode = itemCode;
         items_db[selectedItemIndex].itemName = itemName;
         items_db[selectedItemIndex].itemPrice = parseFloat(itemPrice);
         items_db[selectedItemIndex].itemQuantity = parseInt(itemQuantity);
@@ -140,7 +143,7 @@ $('#deleteItemBtn').on('click', function(){
     }
 });
 
-$("table tbody").on('click', 'tr', function(){
+$("#item-tbody").on('click', 'tr', function(){
     let idx = $(this).index();
     console.log(idx);
     let obj = items_db[idx];
@@ -166,10 +169,10 @@ $("table tbody").on('click', 'tr', function(){
 
 // Clear form function
 function clearForm() {
+    $("#itemCode").val(generateItemCode());
     $("#itemName").val('');
     $("#itemPrice").val('');
     $("#itemQuantity").val('');
-    $("#itemId").val('');
 
     $('#saveItemBtn').show();
     $('#updateItemBtn').hide();

@@ -141,10 +141,6 @@
 
             <div class="row mb-3">
               <div class="col-md-6">
-                <label for="itemCode" class="form-label">Item Code</label>
-                <input type="text" class="form-control" id="itemCode" placeholder="Enter item code">
-              </div>
-              <div class="col-md-6">
                 <label for="itemName" class="form-label">Item Name</label>
                 <input type="text" class="form-control" id="itemName" placeholder="Enter item name">
               </div>
@@ -221,19 +217,14 @@
             <!-- Order Details Section -->
             <div class="row mb-3">
               <div class="col-md-4">
-                <label for="orderID" class="form-label">Order ID</label>
-                <input type="text" class="form-control" id="orderID" placeholder="Order ID" readonly>
+                <label for="custId" class="form-label">Customer</label>
+                <select class="form-select" id="custId">
+                  <option selected disabled>Select customer</option>
+                </select>
               </div>
               <div class="col-md-4">
                 <label for="orderDate" class="form-label">Date</label>
                 <input type="date" class="form-control" id="orderDate">
-              </div>
-              <div class="col-md-4">
-                <label for="customerID" class="form-label">Customer</label>
-                <select class="form-select" id="selectCustomer">
-                  <option selected disabled>Select customer</option>
-
-                </select>
               </div>
             </div>
 
@@ -250,10 +241,6 @@
                       <option selected disabled>Select item</option>
 
                     </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="unitPrice" class="form-label">Unit Price</label>
-                    <input type="number" class="form-control" id="unitPrice" placeholder="0.00" readonly>
                   </div>
                   <div class="col-md-2">
                     <label for="quantity" class="form-label">Quantity</label>

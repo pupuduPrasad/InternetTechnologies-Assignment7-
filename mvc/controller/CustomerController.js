@@ -3,17 +3,30 @@ import CustomerModel from "../model/CustomerModel.js";
 // global variable
 let selectedCustomerIndex = -1;
 
+
+function generateCustomerId() {
+    if (customers_db.length === 0) {
+        return "C001";
+    } else {
+        let lastCustomer = customers_db[customers_db.length - 1];
+        let lastId = lastCustomer.customerId; // e.g., "C005"
+        let number = parseInt(lastId.substring(1)) + 1;
+        return "C" + number.toString().padStart(3, "0");
+    }
+}
+
 // load customer
 function loadCustomer() {
     $('#customer-tbody').empty();
     customers_db.map((item, index) => {
+        let customerId = item.customerId;
         let fullName = item.fullName;
         let address = item.address;
         let email = item.email;
         let contactNumber = item.contactNumber;
 
         let data = `<tr>
-                            <td>${index + 1}</td>
+                            <td>${customerId}</td>
                             <td>${fullName}</td>
                             <td>${address}</td>
                             <td>${email}</td>
@@ -32,17 +45,15 @@ $('#saveBtn').on('click', function(){
     let contactNumber = $('#contactNumber').val();
 
     if(fullName === '' || address === '' || email === '' || contactNumber === '') {
-
         Swal.fire({
             title: 'Error!',
             text: 'Invalid Inputs',
             icon: 'error',
             confirmButtonText: 'Ok'
-        })
+        });
     } else {
-
-
-        let customer_data = new CustomerModel(fullName, address, email, contactNumber);
+        let customerId = generateCustomerId(); // Generate new ID
+        let customer_data = new CustomerModel(customerId, fullName, address, email, contactNumber);
         customers_db.push(customer_data);
         console.log(customer_data);
 

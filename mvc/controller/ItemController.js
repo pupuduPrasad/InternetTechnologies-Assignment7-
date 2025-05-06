@@ -3,6 +3,18 @@ import ItemModel from "../model/ItemModel.js";
 
 let selectedItemIndex = -1;
 
+function generateItemCode() {
+    if (items_db.length === 0) {
+        return "I001";
+    } else {
+        let lastItem = items_db[items_db.length - 1];
+        let lastCode = lastItem.itemCode; // e.g., "I007"
+        let number = parseInt(lastCode.substring(1)) + 1;
+        return "I" + number.toString().padStart(3, "0");
+    }
+}
+
+
 // load items
 function loadItems() {
     $('table tbody').empty();
@@ -24,19 +36,19 @@ function loadItems() {
 }
 
 $('#saveItemBtn').on('click', function(){
-    let itemCode = $('#itemCode').val();
     let itemName = $('#itemName').val();
     let itemPrice = $('#itemPrice').val();
     let itemQuantity = $('#itemQuantity').val();
 
-    if(itemCode === '' || itemName === '' || itemPrice === '' || itemQuantity === '') {
+    if(itemName === '' || itemPrice === '' || itemQuantity === '') {
         Swal.fire({
             title: 'Error!',
             text: 'Invalid Inputs',
             icon: 'error',
             confirmButtonText: 'Ok'
-        })
+        });
     } else {
+        let itemCode = generateItemCode();
         let item_data = new ItemModel(itemCode, itemName, parseFloat(itemPrice), parseInt(itemQuantity));
         items_db.push(item_data);
         console.log(item_data);
@@ -153,7 +165,6 @@ $("table tbody").on('click', 'tr', function(){
 
 // Clear form function
 function clearForm() {
-    $("#itemCode").val('');
     $("#itemName").val('');
     $("#itemPrice").val('');
     $("#itemQuantity").val('');

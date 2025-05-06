@@ -179,14 +179,15 @@ $("#customer-tbody").on('click', 'tr', function(){
 });
 
 function clearForm() {
+    const newId = generateCustomerId();
+    console.log("Generated ID:", newId);
+
     $('#customerId').val(generateCustomerId());
     $("#fullName").val('');
     $("#address").val('');
     $("#email").val('');
     $("#contactNumber").val('');
-    selectedCustomerIndex = -1;
 
-    // Show save button, hide update and delete buttons
     $('#saveBtn').show();
     $('#updateBtn').hide();
     $('#deleteBtn').hide();

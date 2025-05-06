@@ -3,6 +3,7 @@ import ItemModel from "../model/ItemModel.js";
 
 let selectedItemIndex = -1;
 
+
 function generateItemCode() {
     if (items_db.length === 0) {
         return "I001";

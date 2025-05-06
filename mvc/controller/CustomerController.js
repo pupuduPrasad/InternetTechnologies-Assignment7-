@@ -161,7 +161,7 @@ $("#customer-tbody").on('click', 'tr', function(){
     // store the select index number
     selectedCustomerIndex = idx;
 
-    let customerID = obj.customerID;
+    let customerID = obj.customerId;
     let fullName = obj.fullName;
     let address = obj.address;
     let email = obj.email;

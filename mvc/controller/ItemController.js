@@ -21,7 +21,7 @@ function generateItemCode() {
 
 
 // load items
-function loadItems() {
+export function loadItems() {
     $('#item-tbody').empty();
     items_db.map((item, index) => {
         let itemCode = item.itemCode;

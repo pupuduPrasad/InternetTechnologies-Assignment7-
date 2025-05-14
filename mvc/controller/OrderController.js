@@ -8,7 +8,6 @@ $(document).ready(function() {
     $('#invoiceNo').val(generatePayID())
     $('#orderCode').val(generateOrderID())
     loadOrderTable();
-    loadDateAndTime();
 });
 
 function generateOrderID() {
@@ -26,18 +25,6 @@ function generateOrderID() {
     return "ORD" + newId.toString().padStart(3, '0');
 }
 
-
-/*--------------------Load date and Time -------------------------*/
-function loadDateAndTime() {
-    const now = new Date();
-
-    const date = now.toISOString().split('T')[0];
-    $('#invoiceDate').val(date);
-
-    const time = now.toTimeString().split(' ')[0].substring(0,5);
-    $('#invoiceTime').val(time);
-}
-/*--------------------Search Customer In the DB--------------------------------*/
 $('#searchCustomer').on('click',function () {
     searchCustomer();
 })
@@ -66,7 +53,6 @@ function searchCustomer() {
         });
     }
 }
-/*--------------------Reset BTN in Customer---------------------------*/
 function resetCustomer() {
     $('#searchCustomerInput').val('');
     $('#loadCid').val('');
@@ -78,7 +64,6 @@ $('#resetCustomerDetails').on('click',function () {
     resetCustomer();
 })
 
-/*--------------------Search Item In the DB--------------------------------*/
 $('#searchItem').on('click',function () {
     searchItem();
 })
@@ -108,7 +93,6 @@ function searchItem() {
     }
 }
 
-/*-------------------Reset BTN in Item------------------------*/
 function resetItem() {
     $('#itemIDInput').val('');
     $('#loadItemId').val('');
@@ -121,11 +105,10 @@ $('#resetItemDetails').on('click',function () {
     resetItem();
 })
 
-/*----------------Save and Quantity Check---------------------------*/
 $('#addToOrder').on('click', function () {
     let itemID = $('#loadItemId').val();
-    let itemName = $('#loadItemName').val();
     let customerName = $('#loadCName').val();
+    let itemName = $('#loadItemName').val();
     let price = parseFloat($('#loadItemPrice').val());
     let needQty = parseInt($('#quantity').val());
     let item = items_db.find(item => item.itemCode === itemID );
@@ -152,8 +135,7 @@ $('#addToOrder').on('click', function () {
         loadItems();
 
         let orderCode = generateOrderID();
-        let orderDate = new Date().toISOString().split('T')[0]; // අද දිනය
-        let order_data = new OrderModel(orderCode,orderDate, customerName, itemName, needQty, price, total);
+        let order_data = new OrderModel(orderCode, customerName, itemName, needQty, price, total);
         orders_db.push(order_data);
 
         loadOrderTable();
@@ -166,7 +148,6 @@ $('#addToOrder').on('click', function () {
             draggable: true
         });
 
-        // ✅ Reset order ID with slight delay to allow orders_db to update
         setTimeout(() => {
             resetOrder();
         }, 0);
@@ -178,11 +159,9 @@ function resetOrder(){
 
 }
 
-/*---------------------Load table--------------------*/
 function loadOrderTable() {
-    let orderDate = $('#orderDate').val();
     $('#order-body').empty();
-    orders_db.map((order,index) => {
+    orders_db.map((order) => {
         let orderCode = order.orderCode;
         let customerName = order.customerName;
         let itemName = order.itemName;
@@ -191,7 +170,6 @@ function loadOrderTable() {
         let total = order.total;
         let data = `<tr>
                             <td>${orderCode}</td>
-                            <td>${orderDate}</td>
                             <td>${customerName}</td>
                             <td>${itemName}</td>
                             <td>${qty}</td>
@@ -207,7 +185,6 @@ function generatePayID() {
     if (payment_db.length === 0) {
         return "PAY001";
     }
-    // Get the last Item ID (assuming last added is at the end)
     let lastId = payment_db[payment_db.length - 1].payId;
     let numberPart = parseInt(lastId.substring(3));
     let newId = numberPart + 1;
@@ -217,20 +194,18 @@ function generatePayID() {
 $('#addPayment').on('click',function () {
     let id = generatePayID()
     $('#invoiceNo').val(id);
-    let date = $('#invoiceDate').val();
-    let time = $('#invoiceTime').val();
     let method = $('#paymentMethod').val();
     let total2 = $('#loadTotal').text();
     let total = parseFloat(total2);
 
-    if (id === '' || date === '' || time === '' || method === '' || total<=0 || isNaN(total)){
+    if (id === '' || method === '' || total<=0 || isNaN(total)){
         Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
         });
     }else {
-        let payment_data = new PaymentModel(id,date,time,method,total);
+        let payment_data = new PaymentModel(id,method,total);
         payment_db.push(payment_data);
         resetPayment();
         Swal.fire({
@@ -251,6 +226,5 @@ function resetPayment() {
     let id = generatePayID();
     $('#invoiceNo').val(id)
     $('#paymentMethod, #loadTotal,#loadTotal').val('');
-    loadDateAndTime();
 }
 

@@ -8,6 +8,8 @@ $(document).ready(function() {
     $('#invoiceNo').val(generatePayID())
     $('#orderCode').val(generateOrderID())
     loadOrderTable();
+    loadDateAndTime();
+
 });
 
 function generateOrderID() {
@@ -24,6 +26,17 @@ function generateOrderID() {
     let newId = numberPart + 1;
     return "ORD" + newId.toString().padStart(3, '0');
 }
+
+function loadDateAndTime() {
+    const now = new Date();
+
+    const date = now.toISOString().split('T')[0];
+    $('#invoiceDate').val(date);
+
+    const time = now.toTimeString().split(' ')[0].substring(0,5);
+    $('#invoiceTime').val(time);
+}
+
 
 $('#searchCustomer').on('click',function () {
     searchCustomer();
@@ -194,18 +207,20 @@ function generatePayID() {
 $('#addPayment').on('click',function () {
     let id = generatePayID()
     $('#invoiceNo').val(id);
+    let date = $('#invoiceDate').val();
+    let time = $('#invoiceTime').val();
     let method = $('#paymentMethod').val();
     let total2 = $('#loadTotal').text();
     let total = parseFloat(total2);
 
-    if (id === '' || method === '' || total<=0 || isNaN(total)){
+    if (id === '' || date === '' || time === '' || method === '' || total<=0 || isNaN(total)){
         Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
         });
     }else {
-        let payment_data = new PaymentModel(id,method,total);
+        let payment_data = new PaymentModel(id,date,time,method,total);
         payment_db.push(payment_data);
         resetPayment();
         Swal.fire({
@@ -225,6 +240,9 @@ $('#resetPaymentDetails').on('click',function () {
 function resetPayment() {
     let id = generatePayID();
     $('#invoiceNo').val(id)
-    $('#paymentMethod, #loadTotal,#loadTotal').val('');
+    $('#paymentMethod').val('');
+    $('#loadTotal').text('');
+    loadDateAndTime();
+
 }
 

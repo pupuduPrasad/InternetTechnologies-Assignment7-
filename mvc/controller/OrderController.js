@@ -305,12 +305,10 @@ $('#addPayment').on('click', function() {
     // Create the order record
     let orderCode = $('#orderCode').val();
 
-    // Create the main order record
+    // Create the main order
     let order_data = new OrderDetailModel(orderCode, customerID, paymentId, totalAmount);
     orders_db.push(order_data);
 
-    // For each item in the order detail, update the inventory
-    // (The item quantities were already updated when adding to order)
 
     reset();
     setEnableCustomer();
@@ -339,5 +337,5 @@ function reset() {
     $('#loadSubTotal').text('');
     loadDateAndTime();
     $('#order-body').empty();
-    order_detail_db.length = 0; // Clear order details array
+    order_detail_db.length = 0;
 }

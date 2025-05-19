@@ -470,16 +470,15 @@
   <table id="orderTable">
     <thead id="orderTableHead">
     <tr id="orderTableHeaderRow">
-      <th id="orderIdHeader">Order ID</th>
-      <th id="customerIdHeader">Customer ID</th>
-      <th id="itemIdHeader">Item ID</th>
-      <th id="orderQuantityHeader">Order Quantity</th>
-      <th id="finalAmountHeader">Final Amount</th>
-      <th id="actionsHeader">Actions</th>
+      <th>Order ID</th>
+      <th>Customer ID</th>
+      <th>Item ID</th>
+      <th>Payment ID</th>
+      <th>Order Quantity</th>
+      <th>Final Amount</th>
     </tr>
     </thead>
-    <tbody id="orderTableBody">
-    <!-- Table data will be dynamically inserted here -->
+    <tbody id="orderDetailTableBody">
     </tbody>
   </table>
 
@@ -491,6 +490,7 @@
 <script type="module" src="mvc/controller/CustomerController.js"></script>
 <script type="module" src="mvc/controller/ItemController.js"></script>
 <script type="module" src="mvc/controller/OrderController.js"></script>
+<!--<script type="module" src="mvc/controller/OrderDetailController.js"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>

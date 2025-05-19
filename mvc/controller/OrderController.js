@@ -167,17 +167,17 @@ $('#addToOrder').on('click', function () {
         return;
     }
 
-    let index = order_detail_db.findIndex(item => item.itemCode === itemCode);
+    let index = orders_db.findIndex(item => item.itemCode === itemCode);
 
     if (index !== -1) {
         // Update existing item quantity and total
-        order_detail_db[index].qty += needQty;
-        order_detail_db[index].total = order_detail_db[index].qty * order_detail_db[index].price;
+        orders_db[index].qty += needQty;
+        orders_db[index].total = orders_db[index].qty * orders_db[index].price;
     } else {
         // Add new item to order details
         let total = price * needQty;
         let order_data = new OrderModel(itemCode, itemName, needQty, price, total);
-        order_detail_db.push(order_data);
+        orders_db.push(order_data);
     }
 
     // Update item quantity in database
@@ -198,7 +198,7 @@ $('#addToOrder').on('click', function () {
 /*-------------------Get Total Amount------------------------*/
 function updateTotalAmount() {
     let total = 0;
-    order_detail_db.forEach(entry => {
+    orders_db.forEach(entry => {
         total += entry.total;
     });
     $('#loadTotal').text(total.toFixed(2));
@@ -240,7 +240,7 @@ $('#cashAmount').on('input', function() {
 /*---------------------Load table--------------------*/
 function loadOrderTable() {
     $('#order-body').empty();
-    order_detail_db.map((orderDetail) => {
+    orders_db.map((orderDetail) => {
         let itemCode = orderDetail.itemCode;
         let itemName = orderDetail.itemName;
         let qty = orderDetail.qty;
@@ -277,6 +277,8 @@ $('#addPayment').on('click', function() {
     let method = $('#paymentMethod').val();
     let totalAmount = parseFloat($('#loadTotal').text());
     let customerID = $('#loadCid').val();
+    let itemId=$('#loadItemId').val();
+    let orderQty=$('#loadItemQty').text();
 
     if (!customerID || customerID === '') {
         Swal.fire({
@@ -287,7 +289,7 @@ $('#addPayment').on('click', function() {
         return;
     }
 
-    if (order_detail_db.length === 0) {
+    if (orders_db.length === 0) {
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -313,7 +315,7 @@ $('#addPayment').on('click', function() {
     let orderCode = $('#orderCode').val();
 
     // Create the main order
-    let order_data = new OrderDetailModel(orderId,customerId,itemId,paymentId,orderQty,totalAmount);
+    let order_data = new OrderDetailModel(orderCode, customerID,itemId, paymentId,orderQty, totalAmount);
     order_detail_db.push(order_data);
 
 
@@ -344,5 +346,5 @@ function reset() {
     $('#loadSubTotal').text('');
     loadDateAndTime();
     $('#order-body').empty();
-    order_detail_db.length = 0;
+    orders_db.length = 0;
 }

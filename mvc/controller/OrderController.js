@@ -215,17 +215,24 @@ $('#discountAmount').on('input', function() {
     }
     let subTotal = total - discount;
     $('#loadSubTotal').text(subTotal.toFixed(2));
+
+    // Re-calculate balance if cash amount is entered
+    let cash = parseFloat($('#cashAmount').val());
+    if (!isNaN(cash)) {
+        let balance = cash - subTotal;
+        $('#balanceAmount').val(balance.toFixed(2));
+    }
 });
 
 /*--------------------LoadBalance---------------------*/
 $('#cashAmount').on('input', function() {
     let cash = parseFloat($('#cashAmount').val());
-    let total = parseFloat($('#loadSubTotal').text());
+    let subTotal = parseFloat($('#loadSubTotal').text());
 
-    if (isNaN(cash) || isNaN(total)) {
+    if (isNaN(cash) || isNaN(subTotal)) {
         $('#balanceAmount').val("Invalid input");
     } else {
-        let balance = cash - total;
+        let balance = cash - subTotal;
         $('#balanceAmount').val(balance.toFixed(2));
     }
 });

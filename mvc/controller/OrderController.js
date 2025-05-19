@@ -313,8 +313,8 @@ $('#addPayment').on('click', function() {
     let orderCode = $('#orderCode').val();
 
     // Create the main order
-    let order_data = new OrderDetailModel(orderCode, customerID, paymentId, totalAmount);
-    orders_db.push(order_data);
+    let order_data = new OrderDetailModel(orderId,customerId,itemId,paymentId,orderQty,totalAmount);
+    order_detail_db.push(order_data);
 
 
     reset();

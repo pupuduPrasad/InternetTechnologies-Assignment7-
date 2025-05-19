@@ -464,6 +464,26 @@
     </div>
   </div>
 </section>
+<section id="orderDetail_page">
+  <!-- Orders Table -->
+  <h3 id="ordersListTitle">Orders List</h3>
+  <table id="orderTable">
+    <thead id="orderTableHead">
+    <tr id="orderTableHeaderRow">
+      <th id="orderIdHeader">Order ID</th>
+      <th id="customerIdHeader">Customer ID</th>
+      <th id="itemIdHeader">Item ID</th>
+      <th id="orderQuantityHeader">Order Quantity</th>
+      <th id="finalAmountHeader">Final Amount</th>
+      <th id="actionsHeader">Actions</th>
+    </tr>
+    </thead>
+    <tbody id="orderTableBody">
+    <!-- Table data will be dynamically inserted here -->
+    </tbody>
+  </table>
+
+</section>
 
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
@@ -475,10 +495,11 @@
 
 <script>
   // Hide all content sections initially except for customer content
+  $("#home").css("display", "block");
   $("#order_page").css("display", "none");
   $("#item_page").css("display", "none");
-  $("#customer_page").css("display", "none"); // Show customer page by default
-  $("#home").css("display", "block"); // Show customer page by default
+  $("#customer_page").css("display", "none");
+  $("#orderDetail_page").css("display", "none");
 
   // home navigation button
   $("#home_nav").on('click', function () {
@@ -486,6 +507,8 @@
     $("#customer_page").css("display", "none");
     $("#order_page").css("display", "none");
     $("#item_page").css("display", "none");
+    $("#orderDetail_page").css("display", "none");
+
   });
 
   // Customer navigation button
@@ -494,6 +517,8 @@
     $("#order_page").css("display", "none");
     $("#item_page").css("display", "none");
     $("#home").css("display", "none");
+    $("#orderDetail_page").css("display", "none");
+
   });
 
   // Item navigation button
@@ -502,6 +527,8 @@
     $("#customer_page").css("display", "none");
     $("#order_page").css("display", "none");
     $("#home").css("display", "none");
+    $("#orderDetail_page").css("display", "none");
+
   });
 
   // Order navigation button
@@ -510,8 +537,17 @@
     $("#customer_page").css("display", "none");
     $("#item_page").css("display", "none");
     $("#home").css("display", "none");
+    $("#orderDetail_page").css("display", "none");
+
   });
 
+  $("#ordersDetails_nav").on('click', function () {
+    $("#orderDetail_page").css("display", "block");
+    $("#customer_page").css("display", "none");
+    $("#item_page").css("display", "none");
+    $("#order_page").css("display", "none");
+    $("#home").css("display", "none");
+  });
 
 
 </script>

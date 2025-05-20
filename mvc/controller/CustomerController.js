@@ -2,7 +2,6 @@ import {customers_db} from "../db/DB.js";
 import CustomerModel from "../model/CustomerModel.js";
 // global variable
 let selectedCustomerIndex = -1;
-
 $(document).ready(function() {
     $('#customerId').val(generateCustomerId());
     loadCustomer();
@@ -41,77 +40,87 @@ function loadCustomer() {
         $('#customer-tbody').append(data);
     })
 }
+function validateCustomerInputs(fullName, address, email, contactNumber) {
+    const nameRegex = /^[A-Za-z\s]{3,}$/;
+    const addressRegex = /^.{5,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^(?:\+94|0)?7\d{8}$/;
+
+    if (!nameRegex.test(fullName)) {
+        Swal.fire('Invalid Name', 'Please enter a valid full name (at least 3 characters,only use letters)', 'error');
+        return false;
+    }
+    if (!addressRegex.test(address)) {
+        Swal.fire('Invalid Address', 'Address must be at least 5 characters long.', 'error');
+        return false;
+    }
+    if (!emailRegex.test(email)) {
+        Swal.fire('Invalid Email', 'Please enter a valid email address.', 'error');
+        return false;
+    }
+    if (!phoneRegex.test(contactNumber)) {
+        Swal.fire('Invalid Contact', 'Please enter a valid Sri Lankan phone number.', 'error');
+        return false;
+    }
+
+    return true;
+}
+
 
 // save
 $('#saveBtn').on('click', function(){
-    let customerId = $('#customerId').val();
-    let fullName = $('#fullName').val();
-    let address = $('#address').val();
-    let email = $('#email').val();
-    let contactNumber = $('#contactNumber').val();
+    let customerId = generateCustomerId()
+    $('#customerId').val(customerId);
+    let fullName = $('#fullName').val().trim();
+    let address = $('#address').val().trim();
+    let email = $('#email').val().trim();
+    let contactNumber = $('#contactNumber').val().trim();
 
-    if(customerId === '' ||fullName === '' || address === '' || email === '' || contactNumber === '') {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Invalid Inputs',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        });
-    } else {
-        let customerId = generateCustomerId(); // Generate new ID
-        let customer_data = new CustomerModel(customerId, fullName, address, email, contactNumber);
-        customers_db.push(customer_data);
-        console.log(customer_data);
-
-        loadCustomer();
-        clearForm();
-
-        Swal.fire({
-            title: "Added Successfully!",
-            icon: "success",
-            draggable: true
-        });
+    if (!validateCustomerInputs(fullName, address, email, contactNumber)) {
+        return;
     }
+    let customer_data = new CustomerModel(customerId, fullName, address, email, contactNumber);
+    customers_db.push(customer_data);
+
+    loadCustomer();
+    clearForm();
+
+    Swal.fire({
+        title: "Added Successfully!",
+        icon: "success",
+        draggable: true
+    });
 });
 
 // update
 $('#updateBtn').on('click', function(){
-    let fullName = $('#fullName').val();
-    let address = $('#address').val();
-    let email = $('#email').val();
-    let contactNumber = $('#contactNumber').val();
+    let fullName = $('#fullName').val().trim();
+    let address = $('#address').val().trim();
+    let email = $('#email').val().trim();
+    let contactNumber = $('#contactNumber').val().trim();
 
-    if(fullName === '' || address === '' || email === '' || contactNumber === '') {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Invalid Inputs',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        })
-    } else if(selectedCustomerIndex === -1) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'No customer selected',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        })
-    } else {
-        // Update the customer object
-        customers_db[selectedCustomerIndex].fullName = fullName;
-        customers_db[selectedCustomerIndex].address = address;
-        customers_db[selectedCustomerIndex].email = email;
-        customers_db[selectedCustomerIndex].contactNumber = contactNumber;
-
-        console.log("Updated customer:", customers_db[selectedCustomerIndex]);
-        loadCustomer();
-        clearForm();
-
-        Swal.fire({
-            title: "Updated Successfully!",
-            icon: "success",
-            draggable: true
-        });
+    if (!validateCustomerInputs(fullName, address, email, contactNumber)) {
+        return;
     }
+
+    if (selectedCustomerIndex === -1) {
+        Swal.fire('Error!', 'No customer selected', 'error');
+        return;
+    }
+
+    customers_db[selectedCustomerIndex].fullName = fullName;
+    customers_db[selectedCustomerIndex].address = address;
+    customers_db[selectedCustomerIndex].email = email;
+    customers_db[selectedCustomerIndex].contactNumber = contactNumber;
+
+    loadCustomer();
+    clearForm();
+
+    Swal.fire({
+        title: "Updated Successfully!",
+        icon: "success",
+        draggable: true
+    });
 });
 
 // delete

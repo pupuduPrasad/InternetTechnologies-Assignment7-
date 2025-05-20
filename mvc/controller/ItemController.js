@@ -40,73 +40,81 @@ export function loadItems() {
     })
 }
 
-$('#saveItemBtn').on('click', function(){
-    let itemCode = $('#itemCode').val();
-    let itemName = $('#itemName').val();
-    let itemPrice = $('#itemPrice').val();
-    let itemQuantity = $('#itemQuantity').val();
+function validateItemInputs(itemName, itemPrice, itemQuantity) {
+    const nameRegex = /^[A-Za-z0-9\s\-]{3,}$/;
+    const price = parseFloat(itemPrice);
+    const quantity = parseInt(itemQuantity);
 
-    if(itemCode === '' ||itemName === '' || itemPrice === '' || itemQuantity === '') {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Invalid Inputs',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        });
-    } else {
-        let itemCode = generateItemCode();
-        let item_data = new ItemModel(itemCode, itemName, parseFloat(itemPrice), parseInt(itemQuantity));
-        items_db.push(item_data);
-        console.log(item_data);
-
-        loadItems();
-        clearForm();
-
-        Swal.fire({
-            title: "Added Successfully!",
-            icon: "success",
-            draggable: true
-        });
+    if (!nameRegex.test(itemName)) {
+        Swal.fire('Invalid Name', 'Item name must be at least 3 characters', 'error');
+        return false;
     }
+    if (isNaN(price) || price <= 0) {
+        Swal.fire('Invalid Price', 'Price must be a positive number.', 'error');
+        return false;
+    }
+    if (isNaN(quantity) || quantity < 0) {
+        Swal.fire('Invalid Quantity', 'Quantity must be a non-negative number.', 'error');
+        return false;
+    }
+
+    return true;
+}
+
+// save
+$('#saveItemBtn').on('click', function(){
+    let itemCode = generateItemCode()
+    $('#itemCode').val(itemCode);
+    let itemName = $('#itemName').val().trim();
+    let itemPrice = $('#itemPrice').val().trim();
+    let itemQuantity = $('#itemQuantity').val().trim();
+
+    if (!validateItemInputs(itemName, itemPrice, itemQuantity)) {
+        return;
+    }
+
+    let item_data = new ItemModel(itemCode, itemName, parseFloat(itemPrice), parseInt(itemQuantity));
+    items_db.push(item_data);
+
+    loadItems();
+    clearForm();
+
+    Swal.fire({
+        title: "Added Successfully!",
+        icon: "success",
+        draggable: true
+    });
 });
 
 // update
 $('#updateItemBtn').on('click', function(){
-    let itemName = $('#itemName').val();
-    let itemPrice = $('#itemPrice').val();
-    let itemQuantity = $('#itemQuantity').val();
+    let itemName = $('#itemName').val().trim();
+    let itemPrice = $('#itemPrice').val().trim();
+    let itemQuantity = $('#itemQuantity').val().trim();
 
-    if(itemName === '' || itemPrice === '' || itemQuantity === '') {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Invalid Inputs',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        })
-    } else if(selectedItemIndex === -1) {
-        Swal.fire({
-            title: 'Error!',
-            text: 'No item selected',
-            icon: 'error',
-            confirmButtonText: 'Ok'
-        })
-    } else {
-        // Update the item object
-        items_db[selectedItemIndex].itemName = itemName;
-        items_db[selectedItemIndex].itemPrice = parseFloat(itemPrice);
-        items_db[selectedItemIndex].itemQuantity = parseInt(itemQuantity);
-
-        console.log("Updated item:", items_db[selectedItemIndex]);
-        loadItems();
-        clearForm();
-
-        Swal.fire({
-            title: "Updated Successfully!",
-            icon: "success",
-            draggable: true
-        });
+    if (!validateItemInputs(itemName, itemPrice, itemQuantity)) {
+        return;
     }
+
+    if (selectedItemIndex === -1) {
+        Swal.fire('Error!', 'No item selected', 'error');
+        return;
+    }
+
+    items_db[selectedItemIndex].itemName = itemName;
+    items_db[selectedItemIndex].itemPrice = parseFloat(itemPrice);
+    items_db[selectedItemIndex].itemQuantity = parseInt(itemQuantity);
+
+    loadItems();
+    clearForm();
+
+    Swal.fire({
+        title: "Updated Successfully!",
+        icon: "success",
+        draggable: true
+    });
 });
+
 // delete
 $('#deleteItemBtn').on('click', function(){
     if(selectedItemIndex === -1) {

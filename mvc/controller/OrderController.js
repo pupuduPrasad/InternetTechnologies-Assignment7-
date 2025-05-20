@@ -5,7 +5,6 @@ import OrderModel from "../model/OrderModel.js";
 import OrderDetailModel from "../model/OrderDetailModel.js";
 import PaymentModel from "../model/PaymentModel.js";
 
-/*-----------------Load Page---------------------------*/
 $(document).ready(function() {
     $('#invoiceNo').val(generatePayID());
     $('#orderCode').val(generateOrderID());

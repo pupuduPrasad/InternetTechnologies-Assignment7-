@@ -15,18 +15,14 @@ $(document).ready(function() {
 
 /*--------------------------Generate next OrderId----------------------------*/
 function generateOrderID() {
-    if (orders_db.length === 0) {
-        return "ORD001";
-    }
-    let lastOrder = orders_db[orders_db.length - 1];
-    if (!lastOrder || !lastOrder.orderCode) {
+    if (order_detail_db.length === 0) {
         return "ORD001";
     }
 
-    let lastId = lastOrder.orderCode;
-    let numberPart = parseInt(lastId.substring(3));
+    let lastId = order_detail_db[order_detail_db.length - 1].orderId;
+    let numberPart = parseInt(lastId.substring(4));
     let newId = numberPart + 1;
-    return "ORD" + newId.toString().padStart(3, '0');
+    return "ORD-" + newId.toString().padStart(3, '0');
 }
 
 /*--------------------Load date and Time -------------------------*/
@@ -276,8 +272,7 @@ $('#addPayment').on('click', function () {
     let id = generatePayID();
     $('#invoiceNo').val(id);
 
-    let orderId = generateOrderID();
-    $('#orderCode').val(orderId);
+    let orderId = $('#orderCode').val();
 
     let date = $('#invoiceDate').val();
     let time = $('#invoiceTime').val();
@@ -297,7 +292,7 @@ $('#addPayment').on('click', function () {
         return;
     }
 
-    if (!customerD || customerID.trim() === '') {
+    if (!customerID || customerID.trim() === '') {
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -345,9 +340,7 @@ $('#resetPaymentDetails').on('click', function() {
 function reset() {
     let id = generatePayID();
     $('#invoiceNo').val(id);
-
-    let orderId = generateOrderID();
-    $('#orderCode').val(orderId);
+    $('#orderCode').val(generateOrderID())
 
     $('#paymentMethod').val('Cash');
     $('#cashAmount').val('');

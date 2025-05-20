@@ -13,6 +13,18 @@ $(document).ready(function() {
     loadDateAndTime();
 });
 
+function validateOrderQuantity(orderQuantity) {
+    const quantity = parseInt(orderQuantity);
+
+    if (isNaN(quantity) || quantity < 0) {
+        Swal.fire('Invalid Quantity', 'Quantity must be a non-negative number.', 'error');
+        return false;
+    }
+
+    return true;
+}
+
+
 function generateOrderID() {
     if (order_detail_db.length === 0) {
         return "ORD001";
@@ -151,12 +163,16 @@ $('#addToOrder').on('click', function () {
     let needQty = parseInt($('#quantity').val());
     let item = items_db.find(item => item.itemCode === itemCode);
 
+
     if (!item) {
         Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "No Item Found",
         });
+        return;
+    }
+    if (!validateOrderQuantity(needQty)) {
         return;
     }
 
@@ -266,7 +282,6 @@ $('#addPayment').on('click', function () {
     $('#invoiceNo').val(id);
 
     let orderId = $('#orderCode').val();
-
     let date = $('#invoiceDate').val();
     let time = $('#invoiceTime').val();
     let method = $('#paymentMethod').val();
@@ -274,7 +289,10 @@ $('#addPayment').on('click', function () {
 
     let customerID = $('#loadCid').val();
     let paymentId = $('#invoiceNo').val();
-    let totAmount = $('#loadSubTotal').text();
+    let totAmount = parseFloat($('#loadSubTotal').text());
+
+    let discount = parseFloat($('#discountAmount').val());
+    let cash = parseFloat($('#cashAmount').val());
 
     if (id === '' || date === '' || time === '' || method === '' || totalAmount <= 0 || isNaN(totalAmount)) {
         Swal.fire({
@@ -303,6 +321,27 @@ $('#addPayment').on('click', function () {
         return;
     }
 
+    // 👉 Discount validation
+    if (isNaN(discount) || discount < 0 || discount > totalAmount) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Discount",
+            text: "Discount must be between 0 and total amount!",
+        });
+        return;
+    }
+
+    // 👉 Cash validation
+    if (isNaN(cash) || cash < totAmount) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Cash Amount",
+            text: "Cash must be greater than or equal to the subtotal!",
+        });
+        return;
+    }
+
+    // ✅ Save payment and order details
     let payment_data = new PaymentModel(id, date, time, method, totalAmount);
     payment_db.push(payment_data);
 
@@ -310,7 +349,7 @@ $('#addPayment').on('click', function () {
         let itemId = orderItem.itemCode;
         let orderQty = orderItem.qty;
 
-        let orderDetail = new OrderDetailModel(orderId, customerID, itemId, paymentId, orderQty, totAmount);
+        let orderDetail = new OrderDetailModel(orderId, customerID, itemId, paymentId, orderQty, totAmount.toFixed(2));
         order_detail_db.push(orderDetail);
     });
 

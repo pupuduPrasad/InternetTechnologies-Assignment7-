@@ -22,7 +22,7 @@ function generateOrderID() {
     let lastId = order_detail_db[order_detail_db.length - 1].orderId;
     let numberPart = parseInt(lastId.substring(4));
     let newId = numberPart + 1;
-    return "ORD-" + newId.toString().padStart(3, '0');
+    return "ORD" + newId.toString().padStart(3, '0');
 }
 
 /*--------------------Load date and Time -------------------------*/

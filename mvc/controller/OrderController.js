@@ -72,7 +72,7 @@ function searchCustomer() {
 
 /*--------------------Reset BTN in Customer---------------------------*/
 function resetCustomer() {
-    $('#orderCode').val(generateOrderID());
+    $('#orderCode').val(generateOrderID())
     $('#searchCustomerInput').val('');
     $('#loadCid').val('');
     $('#loadCName').val('');
@@ -270,15 +270,20 @@ function generatePayID() {
 }
 
 /*------------------------Add Payment-----------------------------*/
+/*------------------------Add Payment-----------------------------*/
 $('#addPayment').on('click', function () {
+
     let id = generatePayID();
     $('#invoiceNo').val(id);
+
+    let orderId = generateOrderID();
+    $('#orderCode').val(orderId);
+
     let date = $('#invoiceDate').val();
     let time = $('#invoiceTime').val();
     let method = $('#paymentMethod').val();
     let totalAmount = parseFloat($('#loadTotal').text());
 
-    let orderCode = $('#orderCode').val();
     let customerID = $('#loadCid').val();
     let paymentId = $('#invoiceNo').val();
     let totAmount = $('#loadSubTotal').text();
@@ -292,29 +297,34 @@ $('#addPayment').on('click', function () {
         return;
     }
 
-    if (!customerID || orders_db.length === 0) {
+    if (!customerD || customerID.trim() === '') {
         Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Please select a customer and add items to the order!",
+            text: "Please select a customer first!",
         });
         return;
     }
 
-    // Create payment record
+    if (orders_db.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please add items to the order!",
+        });
+        return;
+    }
+
     let payment_data = new PaymentModel(id, date, time, method, totalAmount);
     payment_db.push(payment_data);
 
-    // Loop through each order item and create OrderDetailModel
     orders_db.forEach(orderItem => {
         let itemId = orderItem.itemCode;
         let orderQty = orderItem.qty;
 
-        let orderDetail = new OrderDetailModel(orderCode, customerID, itemId, paymentId, orderQty, totAmount);
+        let orderDetail = new OrderDetailModel(orderId, customerID, itemId, paymentId, orderQty, totAmount);
         order_detail_db.push(orderDetail);
     });
-
-    console.log("Order Detail DB එකට data එක එකතු කළාට පසු:", order_detail_db);
 
     reset();
     setEnableCustomer();
@@ -327,7 +337,6 @@ $('#addPayment').on('click', function () {
         draggable: true
     });
 });
-
 /*-------------Reset Payment Details----------------------*/
 $('#resetPaymentDetails').on('click', function() {
     reset();
@@ -336,6 +345,10 @@ $('#resetPaymentDetails').on('click', function() {
 function reset() {
     let id = generatePayID();
     $('#invoiceNo').val(id);
+
+    let orderId = generateOrderID();
+    $('#orderCode').val(orderId);
+
     $('#paymentMethod').val('Cash');
     $('#cashAmount').val('');
     $('#discountAmount').val('');
@@ -345,4 +358,5 @@ function reset() {
     loadDateAndTime();
     $('#order-body').empty();
     orders_db.length = 0;
+
 }

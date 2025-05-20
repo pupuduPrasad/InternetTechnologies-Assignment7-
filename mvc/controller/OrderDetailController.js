@@ -1,24 +1,26 @@
-import {order_detail_db} from "../db/DB.js";
+import {order_detail_db, orders_db} from "../db/DB.js";
 
 
 $(document).ready(function() {
     loadOrderDetailTable();
 });
-
 export function loadOrderDetailTable() {
-    let tbody = $('#orderDetailTableBody');
-    tbody.empty(); // පරණ rows clear කරනවා
-
-    order_detail_db.forEach(detail => {
-        let row = `
-        <tr>
-            <td>${detail.orderId}</td>
-            <td>${detail.customerId}</td>
-            <td>${detail.itemId || '-'}</td>
-            <td>${detail.paymentId}</td>
-            <td>${detail.orderQty || '-'}</td>
-            <td>${parseFloat(detail.totalAmount).toFixed(2)}</td>
-        </tr>`;
-        tbody.append(row);
+    $('#orderDetailTableBody').empty();
+    order_detail_db.map((orderDetails) => {
+        let orderId = orderDetails.orderId;
+        let customerId = orderDetails.customerId;
+        let itemId = orderDetails.itemId;
+        let paymentId = orderDetails.paymentId;
+        let orderQty = orderDetails.orderQty;
+        let totalAmount = orderDetails.totalAmount;
+        let data = `<tr>
+                       <td>${orderId}</td>
+                       <td>${customerId}</td>
+                       <td>${itemId}</td>
+                       <td>${paymentId}</td>
+                       <td>${orderQty}</td>
+                       <td>${totalAmount}</td>
+                   </tr>`;
+        $('#orderDetailTableBody').append(data);
     });
 }

@@ -1,5 +1,6 @@
 import {customers_db, items_db, orders_db, payment_db, order_detail_db} from "../db/DB.js";
 import {loadItems} from "./ItemController.js";
+import {loadOrderDetailTable} from "./orderDetailController.js";
 import OrderModel from "../model/OrderModel.js";
 import OrderDetailModel from "../model/OrderDetailModel.js";
 import PaymentModel from "../model/PaymentModel.js";
@@ -269,36 +270,20 @@ function generatePayID() {
 }
 
 /*------------------------Add Payment-----------------------------*/
-$('#addPayment').on('click', function() {
-    let paymentId = generatePayID();
-    $('#invoiceNo').val(paymentId);
+$('#addPayment').on('click', function () {
+    let id = generatePayID();
+    $('#invoiceNo').val(id);
     let date = $('#invoiceDate').val();
     let time = $('#invoiceTime').val();
     let method = $('#paymentMethod').val();
     let totalAmount = parseFloat($('#loadTotal').text());
+
+    let orderCode = $('#orderCode').val();
     let customerID = $('#loadCid').val();
-    let itemId=$('#loadItemId').val();
-    let orderQty=$('#loadItemQty').text();
+    let paymentId = $('#invoiceNo').val();
+    let totAmount = $('#loadSubTotal').text();
 
-    if (!customerID || customerID === '') {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Please select a customer first!",
-        });
-        return;
-    }
-
-    if (orders_db.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Please add items to the order first!",
-        });
-        return;
-    }
-
-    if (paymentId === '' || date === '' || time === '' || method === '' || totalAmount <= 0 || isNaN(totalAmount)) {
+    if (id === '' || date === '' || time === '' || method === '' || totalAmount <= 0 || isNaN(totalAmount)) {
         Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -307,21 +292,34 @@ $('#addPayment').on('click', function() {
         return;
     }
 
-    // Create the payment record
-    let payment_data = new PaymentModel(paymentId, date, time, method, totalAmount);
+    if (!customerID || orders_db.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please select a customer and add items to the order!",
+        });
+        return;
+    }
+
+    // Create payment record
+    let payment_data = new PaymentModel(id, date, time, method, totalAmount);
     payment_db.push(payment_data);
 
-    // Create the order record
-    let orderCode = $('#orderCode').val();
+    // Loop through each order item and create OrderDetailModel
+    orders_db.forEach(orderItem => {
+        let itemId = orderItem.itemCode;
+        let orderQty = orderItem.qty;
 
-    // Create the main order
-    let order_data = new OrderDetailModel(orderCode, customerID,itemId, paymentId,orderQty, totalAmount);
-    order_detail_db.push(order_data);
+        let orderDetail = new OrderDetailModel(orderCode, customerID, itemId, paymentId, orderQty, totAmount);
+        order_detail_db.push(orderDetail);
+    });
 
+    console.log("Order Detail DB එකට data එක එකතු කළාට පසු:", order_detail_db);
 
     reset();
     setEnableCustomer();
     resetCustomer();
+    loadOrderDetailTable();
 
     Swal.fire({
         title: "Order Placed Successfully!",

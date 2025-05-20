@@ -13,7 +13,6 @@ $(document).ready(function() {
     loadDateAndTime();
 });
 
-/*--------------------------Generate next OrderId----------------------------*/
 function generateOrderID() {
     if (order_detail_db.length === 0) {
         return "ORD001";
@@ -25,7 +24,16 @@ function generateOrderID() {
     return "ORD" + newId.toString().padStart(3, '0');
 }
 
-/*--------------------Load date and Time -------------------------*/
+function generatePayID() {
+    if (payment_db.length === 0) {
+        return "PAY001";
+    }
+    let lastId = payment_db[payment_db.length - 1].payId;
+    let numberPart = parseInt(lastId.substring(3));
+    let newId = numberPart + 1;
+    return "PAY" + newId.toString().padStart(3, '0');
+}
+
 function loadDateAndTime() {
     const now = new Date();
 
@@ -36,7 +44,6 @@ function loadDateAndTime() {
     $('#invoiceTime').val(time);
 }
 
-/*--------------------Search Customer In the DB--------------------------------*/
 $('#searchCustomer').on('click',function () {
     searchCustomer();
 });
@@ -66,7 +73,6 @@ function searchCustomer() {
     }
 }
 
-/*--------------------Reset BTN in Customer---------------------------*/
 function resetCustomer() {
     $('#orderCode').val(generateOrderID())
     $('#searchCustomerInput').val('');
@@ -81,7 +87,6 @@ $('#resetCustomerDetails').on('click',function () {
     setEnableCustomer();
 });
 
-/*--------------------Search Item In the DB--------------------------------*/
 $('#searchItem').on('click',function () {
     searchItem();
 });
@@ -254,19 +259,7 @@ function loadOrderTable() {
     });
 }
 
-/*--------------------------Generate next PayId----------------------------*/
-function generatePayID() {
-    if (payment_db.length === 0) {
-        return "PAY001";
-    }
-    let lastId = payment_db[payment_db.length - 1].payId;
-    let numberPart = parseInt(lastId.substring(3));
-    let newId = numberPart + 1;
-    return "PAY" + newId.toString().padStart(3, '0');
-}
 
-/*------------------------Add Payment-----------------------------*/
-/*------------------------Add Payment-----------------------------*/
 $('#addPayment').on('click', function () {
 
     let id = generatePayID();
@@ -332,7 +325,7 @@ $('#addPayment').on('click', function () {
         draggable: true
     });
 });
-/*-------------Reset Payment Details----------------------*/
+
 $('#resetPaymentDetails').on('click', function() {
     reset();
 });

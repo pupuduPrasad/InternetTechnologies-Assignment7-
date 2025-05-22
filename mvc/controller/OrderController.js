@@ -287,6 +287,7 @@ $('#addPayment').on('click', function () {
     let totalAmount = parseFloat($('#loadTotal').text());
 
     let customerID = $('#loadCid').val();
+    let oDate = $('#invoiceDate').val();
     let paymentId = $('#invoiceNo').val();
     let totAmount = parseFloat($('#loadSubTotal').text());
 
@@ -345,10 +346,9 @@ $('#addPayment').on('click', function () {
     payment_db.push(payment_data);
 
     orders_db.forEach(orderItem => {
-        let itemId = orderItem.itemCode;
         let orderQty = orderItem.qty;
 
-        let orderDetail = new OrderDetailModel(orderId, customerID, itemId, paymentId, orderQty, totAmount.toFixed(2));
+        let orderDetail = new OrderDetailModel(orderId, customerID, oDate, paymentId, orderQty, totAmount.toFixed(2));
         order_detail_db.push(orderDetail);
     });
 

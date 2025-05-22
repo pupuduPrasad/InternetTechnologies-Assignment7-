@@ -12,86 +12,96 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-<!-- Navigation Bar -->
+<!-- Bootstrap 5 Responsive Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="#" data-page="home">
-      <i class="fa-solid fa-seedling"></i>
+    <a class="navbar-brand d-flex align-items-center" href="#" id="brand_home">
+      <i class="fa-solid fa-seedling me-2"></i>
       <span class="fw-bold text-success">PRASAD POS System</span>
     </a>
+
+    <!-- Hamburger / Toggle button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Links -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <button id="home_nav" class="nav-item btn btn-link">
-          Home
-        </button>
-        <button id="customer_nav" class="nav-item btn btn-link">
-          Customer
-        </button>
-        <button id="items_nav" class="nav-item btn btn-link">
-          Items
-        </button>
-        <button id="orders_nav" class="nav-item btn btn-link">
-          Orders
-        </button>
-        <button id="ordersDetails_nav" class="nav-item btn btn-link">
-          Order Details
-        </button>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <button id="home_nav" class="nav-link btn btn-link active">Home</button>
+        </li>
+        <li class="nav-item">
+          <button id="customer_nav" class="nav-link btn btn-link">Customer</button>
+        </li>
+        <li class="nav-item">
+          <button id="items_nav" class="nav-link btn btn-link">Items</button>
+        </li>
+        <li class="nav-item">
+          <button id="orders_nav" class="nav-link btn btn-link">Orders</button>
+        </li>
+        <li class="nav-item">
+          <button id="ordersDetails_nav" class="nav-link btn btn-link">Order Details</button>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-  <!-- Home Page -->
-  <div id="home" class="page">
-    <div class="d-flex align-items-center mb-4">
-      <i class="fas fa-tachometer-alt fs-3 me-2"></i>
-      <h1 class="mb-0">Home</h1>
-    </div>
+<!-- Home Page -->
+<div id="home" class="page">
+  <div class="d-flex align-items-center mb-4">
+    <i class="fas fa-tachometer-alt fs-3 me-2"></i>
+    <h1 class="mb-0">Home</h1>
+  </div>
 
-    <!-- Card Grid -->
-    <div class="row g-4 cardSet" >
+  <!-- Card Grid -->
+  <div class="container my-5">
+    <div class="row g-4">
+
       <!-- Customers Card -->
-      <div class="col-md-6 col-lg-3 cards" id="customCard">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="customers">
-          <div class="card-header bg-custom">Customers</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-users"></i>
+      <div class="col-12 col-sm-6 col-lg-3" id="customCard">
+        <div class="card shadow-sm h-100 text-center dashboard-card" style="cursor: pointer;">
+          <div class="card-header bg-success text-white fw-bold">Customers</div>
+          <div class="card-body py-4">
+            <div class="card-icon mb-3">
+              <i class="fas fa-users icon text-success "></i>
             </div>
-            <div class="card-count">93</div>
           </div>
         </div>
       </div>
 
       <!-- Items Card -->
-      <div class="col-md-6 col-lg-3 cards" id="itemCard">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="items">
-          <div class="card-header bg-custom">Items</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-cubes"></i>
+      <div id="itemCard" class="col-12 col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100 text-center dashboard-card" style="cursor: pointer;">
+          <div class="card-header bg-primary text-white fw-bold">Items</div>
+          <div class="card-body py-4">
+            <div class="card-icon mb-3">
+              <i class="fas fa-cubes icon text-primary"></i>
             </div>
-            <div class="card-count">101</div>
           </div>
         </div>
       </div>
 
-      <!-- My Orders Card -->
-      <div class="col-md-6 col-lg-3 cards" id="orderCard">
-        <div class="card shadow-sm h-100 dashboard-card" data-page="orders">
-          <div class="card-header bg-custom">My Orders</div>
-          <div class="card-body text-center py-4">
-            <div class="card-icon">
-              <i class="fas fa-shopping-cart"></i>
+      <!-- Orders Card -->
+      <div id="orderCard" class="col-12 col-sm-6 col-lg-3">
+        <div class="card shadow-sm h-100 text-center dashboard-card" style="cursor: pointer;">
+          <div class="card-header bg-warning text-dark fw-bold">My Orders</div>
+          <div class="card-body py-4">
+            <div class="card-icon mb-3">
+              <i class="fas fa-shopping-cart icon text-warning"></i>
             </div>
-            <div class="card-count">999</div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
+</div>
+
 <!-- Customers Page -->
-<section id="customer_page">
+<section id="customer_page" style="display: none;">
   <div id="customers" class="page container-fluid">
     <!-- Header -->
     <div class="d-flex align-items-center mb-4">
@@ -176,88 +186,90 @@
     </div>
   </div>
 </section>
+
 <!-- Items Page -->
-<section id="item_page">
-    <div id="items" class="page container-fluid">
-      <!-- Header -->
-      <div class="d-flex align-items-center mb-4">
-        <i class="fas fa-box-open fs-3 me-2"></i>
-        <h1 class="mb-0">Item Management</h1>
+<section id="item_page" style="display: none;">
+  <div id="items" class="page container-fluid">
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-4">
+      <i class="fas fa-box-open fs-3 me-2"></i>
+      <h1 class="mb-0">Item Management</h1>
+    </div>
+
+    <!-- Item Form -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Item Information</h5>
       </div>
-
-      <!-- Item Form -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0">Item Information</h5>
-        </div>
-        <div class="card-body">
-          <form id="itemForm">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="itemCode" class="form-label">Item Id</label>
-                <input type="text" class="form-control" id="itemCode" readonly>
-              </div>
-              <div class="col-md-6">
-                <label for="itemName" class="form-label">Item Name</label>
-                <input type="text" class="form-control" id="itemName" placeholder="Enter item name">
-              </div>
+      <div class="card-body">
+        <form id="itemForm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="itemCode" class="form-label">Item Id</label>
+              <input type="text" class="form-control" id="itemCode" readonly>
             </div>
-
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="itemPrice" class="form-label">Price</label>
-                <input type="number" class="form-control" id="itemPrice" placeholder="Enter price">
-              </div>
-              <div class="col-md-6">
-                <label for="itemQuantity" class="form-label">Quantity in Stock</label>
-                <input type="number" class="form-control" id="itemQuantity" placeholder="Enter quantity">
-              </div>
+            <div class="col-md-6">
+              <label for="itemName" class="form-label">Item Name</label>
+              <input type="text" class="form-control" id="itemName" placeholder="Enter item name">
             </div>
-
-            <div class="d-flex gap-2">
-              <button type="button" id="saveItemBtn" class="btn btn-success">
-                <i class="fas fa-save me-1"></i> Save
-              </button>
-              <button type="button" id="updateItemBtn" class="btn btn-warning">
-                <i class="fas fa-edit me-1"></i> Update
-              </button>
-              <button type="button" id="deleteItemBtn" class="btn btn-danger">
-                <i class="fas fa-trash me-1"></i> Delete
-              </button>
-              <button type="button" id="refreshItemBtn" class="btn btn-info">
-                <i class="fas fa-sync-alt me-1"></i> Refresh
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Item Table -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">
-          <h5 class="mb-0">Item List</h5>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-hover">
-              <thead class="table-success">
-              <tr>
-                <th>Item Code</th>
-                <th>Item Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-              </tr>
-              </thead>
-              <tbody id="item-tbody">
-              </tbody>
-            </table>
           </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="itemPrice" class="form-label">Price</label>
+              <input type="number" class="form-control" id="itemPrice" placeholder="Enter price">
+            </div>
+            <div class="col-md-6">
+              <label for="itemQuantity" class="form-label">Quantity in Stock</label>
+              <input type="number" class="form-control" id="itemQuantity" placeholder="Enter quantity">
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" id="saveItemBtn" class="btn btn-success">
+              <i class="fas fa-save me-1"></i> Save
+            </button>
+            <button type="button" id="updateItemBtn" class="btn btn-warning">
+              <i class="fas fa-edit me-1"></i> Update
+            </button>
+            <button type="button" id="deleteItemBtn" class="btn btn-danger">
+              <i class="fas fa-trash me-1"></i> Delete
+            </button>
+            <button type="button" id="refreshItemBtn" class="btn btn-info">
+              <i class="fas fa-sync-alt me-1"></i> Refresh
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Item Table -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Item List</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-success">
+            <tr>
+              <th>Item Code</th>
+              <th>Item Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody id="item-tbody">
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
 </section>
+
 <!--Order Section-->
-<section id="order_page" class="container pt-4">
+<section id="order_page" class="container pt-4" style="display: none;">
   <!-- Section Title -->
   <div class="d-flex align-items-center mb-4">
     <i class="fas fa-shopping-cart fs-3 me-2"></i>
@@ -464,7 +476,8 @@
     </div>
   </div>
 </section>
-<section id="orderDetail_page">
+
+<section id="orderDetail_page" style="display: none;">
   <!-- Orders Table -->
   <h3 id="ordersListTitle">Orders List</h3>
   <table id="orderTable">
@@ -472,7 +485,7 @@
     <tr id="orderTableHeaderRow">
       <th>Order ID</th>
       <th>Customer ID</th>
-      <th>Item ID</th>
+      <th>Date</th>
       <th>Payment ID</th>
       <th>Order Quantity</th>
       <th>Final Amount</th>
@@ -481,7 +494,6 @@
     <tbody id="orderDetailTableBody">
     </tbody>
   </table>
-
 </section>
 
 <!-- Bootstrap -->
@@ -494,7 +506,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  // Hide all content sections initially except for customer content
   $("#home").css("display", "block");
   $("#order_page").css("display", "none");
   $("#item_page").css("display", "none");
@@ -532,7 +543,7 @@
   });
 
   // Order navigation button
-  $("#orders_nav,#orderCard").on('click', function () {
+  $("#orders_nav,#orderCode").on('click', function () {
     $("#order_page").css("display", "block");
     $("#customer_page").css("display", "none");
     $("#item_page").css("display", "none");

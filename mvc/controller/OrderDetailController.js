@@ -9,14 +9,14 @@ export function loadOrderDetailTable() {
     order_detail_db.map((orderDetails) => {
         let orderId = orderDetails.orderId;
         let customerId = orderDetails.customerId;
-        let itemId = orderDetails.itemId;
+        let oDate = orderDetails.date;
         let paymentId = orderDetails.paymentId;
         let orderQty = orderDetails.orderQty;
         let totalAmount = orderDetails.totalAmount;
         let data = `<tr>
                        <td>${orderId}</td>
                        <td>${customerId}</td>
-                       <td>${itemId}</td>
+                       <td>${oDate}</td>
                        <td>${paymentId}</td>
                        <td>${orderQty}</td>
                        <td>${totalAmount}</td>

@@ -21,13 +21,18 @@ body{
     background-color: #28a745;
     color: white;
 }
+.card-icon .icon {
+    font-size: 5rem; /* Adjust size as needed: 3rem = ~48px */
+    margin-bottom: 20px;
+}
+
 #home{
     padding-left: 15vw;
     padding-top: 30vh;
 }
 .cards{
     width: 25vw;
-    height: 25vh;
+    height: 28vh;
 }
 .payment-container {
     max-width: 95%;

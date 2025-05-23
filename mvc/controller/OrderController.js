@@ -1,15 +1,16 @@
-import {customers_db, items_db, orders_db, payment_db, order_detail_db} from "../db/DB.js";
-import {loadItems} from "./ItemController.js";
-import {loadOrderDetailTable} from "./orderDetailController.js";
+// OrderController.js
+import { customers_db, items_db, orders_db, payment_db, order_detail_db } from "../db/DB.js";
+import { loadItems } from "./ItemController.js";
+import { loadOrderDetailTable } from "./orderDetailController.js";
 import OrderModel from "../model/OrderModel.js";
 import OrderDetailModel from "../model/OrderDetailModel.js";
 import PaymentModel from "../model/PaymentModel.js";
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('#invoiceNo').val(generatePayID());
     $('#orderCode').val(generateOrderID());
     loadOrderTable();
-    loadDateAndTime();
+    loadDate();
 });
 
 function validateOrderQuantity(orderQuantity) {
@@ -22,7 +23,6 @@ function validateOrderQuantity(orderQuantity) {
 
     return true;
 }
-
 
 function generateOrderID() {
     if (order_detail_db.length === 0) {
@@ -45,44 +45,31 @@ function generatePayID() {
     return "PAY" + newId.toString().padStart(3, '0');
 }
 
-function loadDateAndTime() {
-    const now = new Date();
-
-    const date = now.toISOString().split('T')[0];
-    $('#invoiceDate').val(date);
-
-    const time = now.toTimeString().split(' ')[0].substring(0,5);
-    $('#invoiceTime').val(time);
+function loadDate() {
+    $('#invoiceDate').val(new Date().toISOString().split('T')[0]);
 }
 
 $('#searchCustomer').on('click',function () {
     searchCustomer();
 });
-
 function searchCustomer() {
-    let id = $('#searchCustomerInput').val().trim();
-    if (!id){
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Search an ID first",
-        });
-        return;
-    }
-    const c = customers_db.find(cust => cust.customerId === id);
-    if (c){
-        $('#loadCid').val(c.customerId);
-        $('#loadCName').val(c.fullName);
-        $('#loadCAddress').val(c.address);
-        $('#loadCPhone').val(c.contactNumber);
+    const id = $('#searchCustomerInput').val().trim();
+    const customer = customers_db.find(c => c.customerId === id);
+
+    if (customer) {
+        $('#loadCid').val(customer.customerId);
+        $('#loadCName').val(customer.fullName);
+        $('#loadCAddress').val(customer.address);
+        $('#loadCPhone').val(customer.contactNumber);
     } else {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Id does not Exist",
-        });
+        Swal.fire("Oops...", "Customer ID does not exist", "error");
     }
 }
+
+$('#resetCustomerDetails').on('click', () => {
+    resetCustomer();
+    setEnableCustomer();
+});
 
 function resetCustomer() {
     $('#orderCode').val(generateOrderID())
@@ -93,41 +80,25 @@ function resetCustomer() {
     $('#loadCPhone').val('');
 }
 
-$('#resetCustomerDetails').on('click',function () {
-    resetCustomer();
-    setEnableCustomer();
-});
-
 $('#searchItem').on('click',function () {
     searchItem();
 });
-
 function searchItem() {
-    let id = $('#itemIDInput').val().trim();
-    if (!id){
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Search an ID first",
-        });
-        return;
-    }
-    const c = items_db.find(item => item.itemCode === id);
-    if (c){
-        $('#loadItemId').val(c.itemCode);
-        $('#loadItemName').val(c.itemName);
-        $('#loadItemQty').val(c.itemQuantity);
-        $('#loadItemPrice').val(c.itemPrice);
+    const id = $('#itemIDInput').val().trim();
+    const item = items_db.find(i => i.itemCode === id);
+
+    if (item) {
+        $('#loadItemId').val(item.itemCode);
+        $('#loadItemName').val(item.itemName);
+        $('#loadItemQty').val(item.itemQuantity);
+        $('#loadItemPrice').val(item.itemPrice);
     } else {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Id does not Exist",
-        });
+        Swal.fire("Oops...", "Item ID does not exist", "error");
     }
 }
 
-/*-------------------Reset BTN in Item------------------------*/
+$('#resetItemDetails').on('click', resetItem);
+
 function resetItem() {
     $('#itemIDInput').val('');
     $('#loadItemId').val('');
@@ -137,11 +108,6 @@ function resetItem() {
     $('#quantity').val('');
 }
 
-$('#resetItemDetails').on('click',function () {
-    resetItem();
-});
-
-/*-------------------------Customer Form BTN changing--------------------------------*/
 function setDisableCustomer() {
     $('#searchCustomer').prop('disabled', true);
     $('#resetCustomerDetails').prop('disabled', true);
@@ -154,50 +120,26 @@ function setEnableCustomer() {
     $('#searchCustomerInput').prop('readonly', false);
 }
 
-/*----------------Add to Order / OrderDetails---------------------------*/
 $('#addToOrder').on('click', function () {
-    let itemCode = $('#loadItemId').val();
-    let itemName = $('#loadItemName').val();
-    let price = parseFloat($('#loadItemPrice').val());
-    let needQty = parseInt($('#quantity').val());
-    let item = items_db.find(item => item.itemCode === itemCode);
+    const itemCode = $('#loadItemId').val();
+    const itemName = $('#loadItemName').val();
+    const price = parseFloat($('#loadItemPrice').val());
+    const needQty = parseInt($('#quantity').val());
+    const item = items_db.find(i => i.itemCode === itemCode);
 
-
-    if (!item) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "No Item Found",
-        });
-        return;
-    }
-    if (!validateOrderQuantity(needQty)) {
+    if (!item || !validateOrderQuantity(needQty) || item.itemQuantity < needQty) {
+        Swal.fire("Oops...", "Invalid item or quantity", "error");
         return;
     }
 
-    if (item.itemQuantity < needQty) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Not enough Quantity",
-        });
-        return;
-    }
-
-    let index = orders_db.findIndex(item => item.itemCode === itemCode);
-
-    if (index !== -1) {
-        // Update existing item quantity and total
-        orders_db[index].qty += needQty;
-        orders_db[index].total = orders_db[index].qty * orders_db[index].price;
+    const existingOrder = orders_db.find(o => o.itemCode === itemCode);
+    if (existingOrder) {
+        existingOrder.qty += needQty;
+        existingOrder.total = existingOrder.qty * existingOrder.price;
     } else {
-        // Add new item to order details
-        let total = price * needQty;
-        let order_data = new OrderModel(itemCode, itemName, needQty, price, total);
-        orders_db.push(order_data);
+        orders_db.push(new OrderModel(itemCode, itemName, needQty, price, price * needQty));
     }
 
-    // Update item quantity in database
     item.itemQuantity -= needQty;
     loadItems();
     setDisableCustomer();
@@ -205,182 +147,95 @@ $('#addToOrder').on('click', function () {
     loadOrderTable();
     updateTotalAmount();
 
-    Swal.fire({
-        title: "Data Saved Successfully!",
-        icon: "success",
-        draggable: true
-    });
+    Swal.fire("Success", "Item added to order", "success");
 });
 
-/*-------------------Get Total Amount------------------------*/
 function updateTotalAmount() {
-    let total = 0;
-    orders_db.forEach(entry => {
-        total += entry.total;
-    });
+    const total = orders_db.reduce((sum, order) => sum + order.total, 0);
     $('#loadTotal').text(total.toFixed(2));
     $('#loadSubTotal').text(total.toFixed(2));
 }
 
-/*--------------------Get Sub Total-----------------*/
-$('#discountAmount').on('input', function() {
-    let total = parseFloat($('#loadTotal').text());
-    let discount = parseFloat($('#discountAmount').val());
-
-    if (isNaN(discount)) {
-        discount = 0;
-    }
-    let subTotal = total - discount;
+$('#discountAmount').on('input', function () {
+    const total = parseFloat($('#loadTotal').text()) || 0;
+    const discount = parseFloat($('#discountAmount').val()) || 0;
+    const subTotal = total - discount;
     $('#loadSubTotal').text(subTotal.toFixed(2));
 
-    // Re-calculate balance if cash amount is entered
-    let cash = parseFloat($('#cashAmount').val());
+    const cash = parseFloat($('#cashAmount').val());
     if (!isNaN(cash)) {
-        let balance = cash - subTotal;
-        $('#balanceAmount').val(balance.toFixed(2));
+        $('#balanceAmount').val((cash - subTotal).toFixed(2));
     }
 });
 
-/*--------------------LoadBalance---------------------*/
-$('#cashAmount').on('input', function() {
-    let cash = parseFloat($('#cashAmount').val());
-    let subTotal = parseFloat($('#loadSubTotal').text());
-
-    if (isNaN(cash) || isNaN(subTotal)) {
-        $('#balanceAmount').val("Invalid input");
-    } else {
-        let balance = cash - subTotal;
-        $('#balanceAmount').val(balance.toFixed(2));
-    }
+$('#cashAmount').on('input', function () {
+    const subTotal = parseFloat($('#loadSubTotal').text()) || 0;
+    const cash = parseFloat($('#cashAmount').val());
+    $('#balanceAmount').val(!isNaN(cash) ? (cash - subTotal).toFixed(2) : "Invalid input");
 });
 
-/*---------------------Load table--------------------*/
 function loadOrderTable() {
     $('#order-body').empty();
-    orders_db.map((orderDetail) => {
-        let itemCode = orderDetail.itemCode;
-        let itemName = orderDetail.itemName;
-        let qty = orderDetail.qty;
-        let price = orderDetail.price;
-        let total = orderDetail.total;
-        let data = `<tr>
-                       <td>${itemCode}</td>
-                       <td>${itemName}</td>
-                       <td>${qty}</td>
-                       <td>${price}</td>
-                       <td>${total}</td>
-                   </tr>`;
-        $('#order-body').append(data);
+    orders_db.forEach(({ itemCode, itemName, qty, price, total }) => {
+        $('#order-body').append(`<tr>
+            <td>${itemCode}</td><td>${itemName}</td>
+            <td>${qty}</td><td>${price}</td><td>${total.toFixed(2)}</td>
+        </tr>`);
     });
 }
 
-
 $('#addPayment').on('click', function () {
+    const orderId = $('#orderCode').val();
+    const date = $('#invoiceDate').val();
+    const method = $('#paymentMethod').val();
+    const totalAmount = parseFloat($('#loadTotal').text());
+    const customerID = $('#loadCid').val();
+    const paymentId = generatePayID();
+    const discount = parseFloat($('#discountAmount').val()) || 0;
+    const cash = parseFloat($('#cashAmount').val());
+    const subTotal = parseFloat($('#loadSubTotal').text());
 
-    let id = generatePayID();
-    $('#invoiceNo').val(id);
-
-    let orderId = $('#orderCode').val();
-    let date = $('#invoiceDate').val();
-    let time = $('#invoiceTime').val();
-    let method = $('#paymentMethod').val();
-    let totalAmount = parseFloat($('#loadTotal').text());
-
-    let customerID = $('#loadCid').val();
-    let oDate = $('#invoiceDate').val();
-    let paymentId = $('#invoiceNo').val();
-    let totAmount = parseFloat($('#loadSubTotal').text());
-
-    let discount = parseFloat($('#discountAmount').val());
-    let cash = parseFloat($('#cashAmount').val());
-
-    if (id === '' || date === '' || time === '' || method === '' || totalAmount <= 0 || isNaN(totalAmount)) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Please fill all payment details!",
-        });
+    if (!customerID || totalAmount <= 0 || isNaN(totalAmount) || isNaN(cash) || cash < subTotal) {
+        Swal.fire("Error", "Invalid payment or customer details", "error");
         return;
     }
 
-    if (!customerID || customerID.trim() === '') {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Please select a customer first!",
-        });
-        return;
-    }
+    // Add payment
+    payment_db.push(new PaymentModel(paymentId, date, method, totalAmount));
 
-    if (orders_db.length === 0) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Please add items to the order!",
-        });
-        return;
-    }
+    // Create single order detail record
+    const totalQuantity = orders_db.reduce((sum, order) => sum + order.qty, 0);
+    const itemsSummary = orders_db.map(order =>
+        `${order.itemCode}(${order.qty})`
+    ).join(', ');
 
-    // 👉 Discount validation
-    if (isNaN(discount) || discount < 0 || discount > totalAmount) {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid Discount",
-            text: "Discount must be between 0 and total amount!",
-        });
-        return;
-    }
+    const orderDetail = new OrderDetailModel(
+        orderId,
+        customerID,
+        date,
+        paymentId,
+        totalQuantity,
+        subTotal.toFixed(2),
+        itemsSummary
+    );
 
-    // 👉 Cash validation
-    if (isNaN(cash) || cash < totAmount) {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid Cash Amount",
-            text: "Cash must be greater than or equal to the subtotal!",
-        });
-        return;
-    }
+    order_detail_db.push(orderDetail);
 
-    // ✅ Save payment and order details
-    let payment_data = new PaymentModel(id, date, time, method, totalAmount);
-    payment_db.push(payment_data);
-
-    orders_db.forEach(orderItem => {
-        let orderQty = orderItem.qty;
-
-        let orderDetail = new OrderDetailModel(orderId, customerID, oDate, paymentId, orderQty, totAmount.toFixed(2));
-        order_detail_db.push(orderDetail);
-    });
-
-    reset();
+    resetAll();
     setEnableCustomer();
-    resetCustomer();
     loadOrderDetailTable();
-
-    Swal.fire({
-        title: "Order Placed Successfully!",
-        icon: "success",
-        draggable: true
-    });
+    Swal.fire("Success", "Order Placed Successfully!", "success");
 });
 
-$('#resetPaymentDetails').on('click', function() {
-    reset();
-});
+$('#resetPaymentDetails').on('click', resetAll);
 
-function reset() {
-    let id = generatePayID();
-    $('#invoiceNo').val(id);
-    $('#orderCode').val(generateOrderID())
-
+function resetAll() {
+    $('#invoiceNo').val(generatePayID());
+    $('#orderCode').val(generateOrderID());
     $('#paymentMethod').val('Cash');
-    $('#cashAmount').val('');
-    $('#discountAmount').val('');
-    $('#balanceAmount').val('');
-    $('#loadTotal').text('');
-    $('#loadSubTotal').text('');
-    loadDateAndTime();
+    $('#cashAmount, #discountAmount, #balanceAmount').val('');
+    $('#loadTotal, #loadSubTotal').text('');
+    loadDate();
     $('#order-body').empty();
     orders_db.length = 0;
-
 }

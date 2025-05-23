@@ -13,7 +13,7 @@ function generateCustomerId() {
         return "C001";
     } else {
         let lastCustomer = customers_db[customers_db.length - 1];
-        let lastId = lastCustomer.customerId; // e.g., "C005"
+        let lastId = lastCustomer.customerId;
         let number = parseInt(lastId.substring(1)) + 1;
         return "C" + number.toString().padStart(3, "0");
     }

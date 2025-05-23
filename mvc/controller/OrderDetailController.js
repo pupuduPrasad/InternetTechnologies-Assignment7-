@@ -1,4 +1,4 @@
-import {order_detail_db, orders_db} from "../db/DB.js";
+import {order_detail_db} from "../db/DB.js";
 
 
 $(document).ready(function() {

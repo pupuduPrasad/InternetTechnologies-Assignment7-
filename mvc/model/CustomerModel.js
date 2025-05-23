@@ -1,4 +1,3 @@
-// model/CustomerModel.js
 export default class CustomerModel {
     constructor(customerId, fullName, address, email, contactNumber) {
         this.customerId = customerId;

@@ -13,7 +13,7 @@ function generateItemCode() {
         return "I001";
     } else {
         let lastItem = items_db[items_db.length - 1];
-        let lastCode = lastItem.itemCode; // e.g., "I007"
+        let lastCode = lastItem.itemCode;
         let number = parseInt(lastCode.substring(1)) + 1;
         return "I" + number.toString().padStart(3, "0");
     }
